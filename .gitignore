@@ -1,0 +1,6 @@
+node_modules/
+dist/
+coverage/
+
+# Local-only internal docs — never published
+docs/

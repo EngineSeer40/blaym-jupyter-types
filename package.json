@@ -1,0 +1,31 @@
+{
+  "name": "blaym-jupyter-types",
+  "version": "0.1.0",
+  "description": "Shared Blaym Jupyter contracts and protocol types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "schema"
+  ],
+  "scripts": {
+    "build": "tsc && npm run schema",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "schema": "ts-json-schema-generator --path src/contracts.ts --type BlaymEventEnvelope --tsconfig tsconfig.json --no-top-ref -o schema/blaym-event-envelope.schema.json",
+    "schema:check": "tmp=$(mktemp) && ts-json-schema-generator --path src/contracts.ts --type BlaymEventEnvelope --tsconfig tsconfig.json --no-top-ref -o \"$tmp\" && diff -u schema/blaym-event-envelope.schema.json \"$tmp\"; rc=$?; rm -f \"$tmp\"; exit $rc",
+    "test": "jest"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.15",
+    "ts-json-schema-generator": "^2.4.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  }
+}
