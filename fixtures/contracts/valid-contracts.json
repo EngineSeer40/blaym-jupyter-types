@@ -1,0 +1,2469 @@
+[
+  {
+    "name": "event notebook_snapshot",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 1,
+      "wallTimeMs": 1760000000001,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_snapshot",
+      "payload": {
+        "path": "analysis.ipynb",
+        "notebookMetadata": {},
+        "kernelName": "python3",
+        "language": "python",
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ]
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "authorHint": "blaym"
+    }
+  },
+  {
+    "name": "event cell_inserted",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 2,
+      "wallTimeMs": 1760000000002,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_inserted",
+      "payload": {
+        "cellId": "cell-2",
+        "index": 1,
+        "cellType": "markdown",
+        "code": "# Title",
+        "revision": 1,
+        "metadata": {}
+      },
+      "authorHint": "person",
+      "links": {
+        "cellId": "cell-2",
+        "cellRevision": 1
+      }
+    }
+  },
+  {
+    "name": "event cell_deleted",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      }
+    }
+  },
+  {
+    "name": "event cell_moved",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0004",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 4,
+      "wallTimeMs": 1760000000004,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_moved",
+      "payload": {
+        "cellId": "cell-2",
+        "fromIndex": 1,
+        "toIndex": 0
+      }
+    }
+  },
+  {
+    "name": "event cell_type_changed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0005",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 5,
+      "wallTimeMs": 1760000000005,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_type_changed",
+      "payload": {
+        "cellId": "cell-2",
+        "cellType": "raw"
+      }
+    }
+  },
+  {
+    "name": "event cell_source_changed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 6,
+      "wallTimeMs": 1760000000006,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_source_changed",
+      "payload": {
+        "cellId": "cell-1",
+        "revision": 3,
+        "code": "print('hi')"
+      },
+      "authorHint": "ai",
+      "links": {
+        "chatTurnId": "turn-1",
+        "cellId": "cell-1",
+        "cellRevision": 3
+      }
+    }
+  },
+  {
+    "name": "event cell_metadata_changed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 7,
+      "wallTimeMs": 1760000000007,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_metadata_changed",
+      "payload": {
+        "cellId": "cell-1",
+        "metadata": {
+          "tags": []
+        }
+      }
+    }
+  },
+  {
+    "name": "event notebook_metadata_changed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0008",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 8,
+      "wallTimeMs": 1760000000008,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_metadata_changed",
+      "payload": {
+        "metadata": {
+          "title": "x"
+        }
+      }
+    }
+  },
+  {
+    "name": "event run_started",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0009",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 9,
+      "wallTimeMs": 1760000000009,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "run_started",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "cellRevision": 3,
+        "runCount": 2
+      },
+      "links": {
+        "runId": "run-2"
+      }
+    }
+  },
+  {
+    "name": "event run_finished",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000a",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 10,
+      "wallTimeMs": 1760000000010,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "run_finished",
+      "payload": {
+        "runId": "run-2",
+        "status": "ok"
+      }
+    }
+  },
+  {
+    "name": "event output_added",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000b",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 11,
+      "wallTimeMs": 1760000000011,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "output_added",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "outputIndex": 0,
+        "item": {
+          "outputType": "stream",
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "contentHash": "sha256:ab12",
+          "preview": "hello",
+          "truncated": false,
+          "sizeBytes": 5,
+          "searchText": "hello"
+        }
+      }
+    }
+  },
+  {
+    "name": "event output_replaced",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000c",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 12,
+      "wallTimeMs": 1760000000012,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "output_replaced",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "outputIndex": 0,
+        "item": {
+          "outputType": "stream",
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "contentHash": "sha256:ab12",
+          "preview": "hello",
+          "truncated": false,
+          "sizeBytes": 5,
+          "searchText": "hello"
+        }
+      }
+    }
+  },
+  {
+    "name": "event outputs_cleared",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000d",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 13,
+      "wallTimeMs": 1760000000013,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "outputs_cleared",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "wait": true
+      }
+    }
+  },
+  {
+    "name": "event kernel_started",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000e",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 14,
+      "wallTimeMs": 1760000000014,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "kernel_started",
+      "payload": {
+        "kernelId": "kernel-1",
+        "kernelName": "python3",
+        "language": "python"
+      }
+    }
+  },
+  {
+    "name": "event kernel_restarted",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 15,
+      "wallTimeMs": 1760000000015,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "kernel_restarted",
+      "payload": {
+        "kernelId": "kernel-1",
+        "reason": "unknown"
+      }
+    }
+  },
+  {
+    "name": "event notebook_renamed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 16,
+      "wallTimeMs": 1760000000016,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_renamed",
+      "payload": {
+        "oldPath": "analysis.ipynb",
+        "newPath": "analysis2.ipynb"
+      }
+    }
+  },
+  {
+    "name": "event notebook_copied",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0011",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 17,
+      "wallTimeMs": 1760000000017,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_copied",
+      "payload": {
+        "oldPath": "analysis.ipynb",
+        "newPath": "copy.ipynb",
+        "newExplorationId": "exploration-2"
+      }
+    }
+  },
+  {
+    "name": "event changed_outside_editor",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0012",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 18,
+      "wallTimeMs": 1760000000018,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "changed_outside_editor",
+      "payload": {
+        "path": "analysis.ipynb",
+        "notebookMetadata": {},
+        "kernelName": "python3",
+        "language": "python",
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ]
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "authorHint": "outside"
+    }
+  },
+  {
+    "name": "event chat_message_added",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 19,
+      "wallTimeMs": 1760000000019,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "chat_message_added",
+      "payload": {
+        "chatSource": "jupyter-ai",
+        "messageId": "msg-1",
+        "sender": "persona-claude",
+        "senderKind": "agent",
+        "body": "Done.",
+        "chatTimeMs": 1760000000500,
+        "agentSessionId": "session-1"
+      }
+    }
+  },
+  {
+    "name": "event chat_message_updated",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 20,
+      "wallTimeMs": 1760000000020,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "chat_message_updated",
+      "payload": {
+        "chatSource": "jupyter-ai",
+        "messageId": "msg-1",
+        "body": "Done. More."
+      }
+    }
+  },
+  {
+    "name": "event branch_point_created",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0015",
+      "explorationId": "exploration-1",
+      "branchId": "branch-b",
+      "tick": 21,
+      "wallTimeMs": 1760000000021,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "branch_point_created",
+      "payload": {
+        "parentBranchId": "branch-main",
+        "parentTick": 6,
+        "name": "try b"
+      }
+    }
+  },
+  {
+    "name": "event recording_gap_started",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 22,
+      "wallTimeMs": 1760000000022,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "recording_gap_started",
+      "payload": {
+        "gapId": "gap-1",
+        "source": "browser",
+        "reason": "no_client"
+      }
+    }
+  },
+  {
+    "name": "event recording_gap_ended",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 23,
+      "wallTimeMs": 1760000000023,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "recording_gap_ended",
+      "payload": {
+        "gapId": "gap-1"
+      }
+    }
+  },
+  {
+    "name": "result ok",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "ok",
+      "state": {
+        "schemaVersion": 2,
+        "position": {
+          "branchId": "branch-main",
+          "tick": 20,
+          "lastEventTick": 20,
+          "branchCount": 20
+        },
+        "notebook": {
+          "path": "analysis.ipynb",
+          "metadata": {},
+          "cells": [
+            {
+              "cellId": "cell-1",
+              "cellType": "code",
+              "code": "print('hello')",
+              "revision": 2,
+              "metadata": {
+                "tags": [
+                  "demo"
+                ]
+              },
+              "outputs": [
+                {
+                  "runId": "run-1",
+                  "items": [
+                    {
+                      "outputType": "stream",
+                      "mimeTypes": [
+                        "text/plain"
+                      ],
+                      "contentHash": "sha256:ab12",
+                      "preview": "hello",
+                      "truncated": false,
+                      "sizeBytes": 5,
+                      "searchText": "hello"
+                    }
+                  ]
+                }
+              ],
+              "runCount": 1
+            }
+          ]
+        },
+        "runs": [
+          {
+            "runId": "run-1",
+            "cellId": "cell-1",
+            "cellRevision": 2,
+            "runCount": 1,
+            "status": "unfinished",
+            "startedTick": 5,
+            "endedTick": 9
+          }
+        ],
+        "chat": [
+          {
+            "chatSource": "jupyter-ai",
+            "messageId": "msg-1",
+            "sender": "persona-claude",
+            "senderKind": "agent",
+            "body": "Done.",
+            "chatTimeMs": 1760000000500,
+            "agentSessionId": "session-1",
+            "addedTick": 19
+          }
+        ],
+        "kernel": {
+          "status": "running",
+          "kernelId": "kernel-1",
+          "kernelName": "python3",
+          "language": "python",
+          "lastRestart": {
+            "kernelId": "kernel-1",
+            "reason": "unknown",
+            "tick": 15
+          }
+        },
+        "gaps": [
+          {
+            "gapId": "gap-1",
+            "source": "browser",
+            "reason": "no_client",
+            "startedTick": 12,
+            "endedTick": 14
+          }
+        ],
+        "detachedOutputs": [
+          {
+            "runId": "run-1",
+            "items": [
+              {
+                "outputType": "stream",
+                "mimeTypes": [
+                  "text/plain"
+                ],
+                "contentHash": "sha256:ab12",
+                "preview": "hello",
+                "truncated": false,
+                "sizeBytes": 5,
+                "searchText": "hello"
+              }
+            ]
+          }
+        ],
+        "lastOutsideChange": {
+          "tick": 18
+        }
+      }
+    }
+  },
+  {
+    "name": "result type ok",
+    "contract": "RebuildOk",
+    "value": {
+      "status": "ok",
+      "state": {
+        "schemaVersion": 2,
+        "position": {
+          "branchId": "branch-main",
+          "tick": 20,
+          "lastEventTick": 20,
+          "branchCount": 20
+        },
+        "notebook": {
+          "path": "analysis.ipynb",
+          "metadata": {},
+          "cells": [
+            {
+              "cellId": "cell-1",
+              "cellType": "code",
+              "code": "print('hello')",
+              "revision": 2,
+              "metadata": {
+                "tags": [
+                  "demo"
+                ]
+              },
+              "outputs": [
+                {
+                  "runId": "run-1",
+                  "items": [
+                    {
+                      "outputType": "stream",
+                      "mimeTypes": [
+                        "text/plain"
+                      ],
+                      "contentHash": "sha256:ab12",
+                      "preview": "hello",
+                      "truncated": false,
+                      "sizeBytes": 5,
+                      "searchText": "hello"
+                    }
+                  ]
+                }
+              ],
+              "runCount": 1
+            }
+          ]
+        },
+        "runs": [
+          {
+            "runId": "run-1",
+            "cellId": "cell-1",
+            "cellRevision": 2,
+            "runCount": 1,
+            "status": "unfinished",
+            "startedTick": 5,
+            "endedTick": 9
+          }
+        ],
+        "chat": [
+          {
+            "chatSource": "jupyter-ai",
+            "messageId": "msg-1",
+            "sender": "persona-claude",
+            "senderKind": "agent",
+            "body": "Done.",
+            "chatTimeMs": 1760000000500,
+            "agentSessionId": "session-1",
+            "addedTick": 19
+          }
+        ],
+        "kernel": {
+          "status": "running",
+          "kernelId": "kernel-1",
+          "kernelName": "python3",
+          "language": "python",
+          "lastRestart": {
+            "kernelId": "kernel-1",
+            "reason": "unknown",
+            "tick": 15
+          }
+        },
+        "gaps": [
+          {
+            "gapId": "gap-1",
+            "source": "browser",
+            "reason": "no_client",
+            "startedTick": 12,
+            "endedTick": 14
+          }
+        ],
+        "detachedOutputs": [
+          {
+            "runId": "run-1",
+            "items": [
+              {
+                "outputType": "stream",
+                "mimeTypes": [
+                  "text/plain"
+                ],
+                "contentHash": "sha256:ab12",
+                "preview": "hello",
+                "truncated": false,
+                "sizeBytes": 5,
+                "searchText": "hello"
+              }
+            ]
+          }
+        ],
+        "lastOutsideChange": {
+          "tick": 18
+        }
+      }
+    }
+  },
+  {
+    "name": "result missing_events",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "missing_events",
+      "firstMissingTick": 7
+    }
+  },
+  {
+    "name": "result type missing_events",
+    "contract": "RebuildMissingEvents",
+    "value": {
+      "status": "missing_events",
+      "firstMissingTick": 7
+    }
+  },
+  {
+    "name": "result conflict",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "conflict",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "first": {
+        "schemaVersion": 2,
+        "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+        "explorationId": "exploration-1",
+        "branchId": "branch-main",
+        "tick": 3,
+        "wallTimeMs": 1760000000003,
+        "userId": "local",
+        "workspaceId": "local",
+        "originId": "origin-1",
+        "type": "cell_deleted",
+        "payload": {
+          "cellId": "cell-2"
+        }
+      },
+      "second": {
+        "schemaVersion": 2,
+        "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+        "explorationId": "exploration-1",
+        "branchId": "branch-main",
+        "tick": 3,
+        "wallTimeMs": 1760000000003,
+        "userId": "local",
+        "workspaceId": "local",
+        "originId": "origin-1",
+        "type": "cell_deleted",
+        "payload": {
+          "cellId": "cell-9"
+        }
+      }
+    }
+  },
+  {
+    "name": "result type conflict",
+    "contract": "RebuildConflict",
+    "value": {
+      "status": "conflict",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "first": {
+        "schemaVersion": 2,
+        "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+        "explorationId": "exploration-1",
+        "branchId": "branch-main",
+        "tick": 3,
+        "wallTimeMs": 1760000000003,
+        "userId": "local",
+        "workspaceId": "local",
+        "originId": "origin-1",
+        "type": "cell_deleted",
+        "payload": {
+          "cellId": "cell-2"
+        }
+      },
+      "second": {
+        "schemaVersion": 2,
+        "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+        "explorationId": "exploration-1",
+        "branchId": "branch-main",
+        "tick": 3,
+        "wallTimeMs": 1760000000003,
+        "userId": "local",
+        "workspaceId": "local",
+        "originId": "origin-1",
+        "type": "cell_deleted",
+        "payload": {
+          "cellId": "cell-9"
+        }
+      }
+    }
+  },
+  {
+    "name": "result invalid_revision",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_revision",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "cellId": "cell-1",
+      "expectedRevision": 3,
+      "actualRevision": 5
+    }
+  },
+  {
+    "name": "result type invalid_revision",
+    "contract": "RebuildInvalidRevision",
+    "value": {
+      "status": "invalid_revision",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "cellId": "cell-1",
+      "expectedRevision": 3,
+      "actualRevision": 5
+    }
+  },
+  {
+    "name": "result unknown_cell",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "unknown_cell",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "cellId": "cell-9"
+    }
+  },
+  {
+    "name": "result type unknown_cell",
+    "contract": "RebuildUnknownCell",
+    "value": {
+      "status": "unknown_cell",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "cellId": "cell-9"
+    }
+  },
+  {
+    "name": "result unknown_branch",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "unknown_branch",
+      "branchId": "branch-x"
+    }
+  },
+  {
+    "name": "result type unknown_branch",
+    "contract": "RebuildUnknownBranch",
+    "value": {
+      "status": "unknown_branch",
+      "branchId": "branch-x"
+    }
+  },
+  {
+    "name": "result lineage_loop",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "lineage_loop",
+      "branchIds": [
+        "a",
+        "b"
+      ]
+    }
+  },
+  {
+    "name": "result type lineage_loop",
+    "contract": "RebuildLineageLoop",
+    "value": {
+      "status": "lineage_loop",
+      "branchIds": [
+        "a",
+        "b"
+      ]
+    }
+  },
+  {
+    "name": "result invalid_event",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "unknown_run",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result type invalid_event",
+    "contract": "RebuildInvalidEvent",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "unknown_run",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: first_event_not_snapshot",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "first_event_not_snapshot",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: tick_clash",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "tick_clash",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: duplicate_id",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "duplicate_id",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: unknown_run",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "unknown_run",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: run_not_running",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "run_not_running",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: unknown_message",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "unknown_message",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: unknown_gap",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "unknown_gap",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: gap_already_ended",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "gap_already_ended",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: no_output_at_index",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "no_output_at_index",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: index_out_of_range",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "index_out_of_range",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: position_mismatch",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "position_mismatch",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: invalid_branch_point",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "invalid_branch_point",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "result invalid_event: run_cell_mismatch",
+    "contract": "RebuildResult",
+    "value": {
+      "status": "invalid_event",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "tick": 9,
+      "reason": "run_cell_mismatch",
+      "detail": "run_finished for a run that was never started"
+    }
+  },
+  {
+    "name": "event cell_deleted with editor jupyterlab",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      },
+      "editor": "jupyterlab"
+    }
+  },
+  {
+    "name": "event cell_deleted with editor notebook7",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      },
+      "editor": "notebook7"
+    }
+  },
+  {
+    "name": "event cell_deleted with editor vscode",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      },
+      "editor": "vscode"
+    }
+  },
+  {
+    "name": "event cell_deleted with editor unknown",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      },
+      "editor": "unknown"
+    }
+  },
+  {
+    "name": "event cell_deleted with authorConfidence known",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      },
+      "authorHint": "ai",
+      "authorConfidence": "known"
+    }
+  },
+  {
+    "name": "event cell_deleted with authorConfidence guess",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 3,
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      },
+      "authorHint": "ai",
+      "authorConfidence": "guess"
+    }
+  },
+  {
+    "name": "event kernel_restarted: reason crash",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 15,
+      "wallTimeMs": 1760000000015,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "kernel_restarted",
+      "payload": {
+        "kernelId": "kernel-1",
+        "reason": "crash"
+      }
+    }
+  },
+  {
+    "name": "event kernel_restarted: reason requested",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 15,
+      "wallTimeMs": 1760000000015,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "kernel_restarted",
+      "payload": {
+        "kernelId": "kernel-1",
+        "reason": "requested"
+      }
+    }
+  },
+  {
+    "name": "event chat_message_added: another chatSource",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 19,
+      "wallTimeMs": 1760000000019,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "chat_message_added",
+      "payload": {
+        "chatSource": "vscode-copilot",
+        "messageId": "msg-1",
+        "sender": "persona-claude",
+        "senderKind": "agent",
+        "body": "Done.",
+        "chatTimeMs": 1760000000500,
+        "agentSessionId": "session-1"
+      }
+    }
+  },
+  {
+    "name": "event recording_gap_started: reason source_closed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 22,
+      "wallTimeMs": 1760000000022,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "recording_gap_started",
+      "payload": {
+        "gapId": "gap-1",
+        "source": "chat",
+        "reason": "source_closed"
+      }
+    }
+  },
+  {
+    "name": "event cell_inserted with outputs",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 2,
+      "wallTimeMs": 1760000000002,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_inserted",
+      "payload": {
+        "cellId": "cell-2",
+        "index": 1,
+        "cellType": "markdown",
+        "code": "# Title",
+        "revision": 1,
+        "metadata": {},
+        "outputs": [
+          {
+            "outputType": "stream",
+            "mimeTypes": [
+              "text/plain"
+            ],
+            "contentHash": "sha256:ab12",
+            "preview": "hello",
+            "truncated": false,
+            "sizeBytes": 5,
+            "searchText": "hello"
+          }
+        ]
+      },
+      "authorHint": "person",
+      "links": {
+        "cellId": "cell-2",
+        "cellRevision": 1
+      }
+    }
+  },
+  {
+    "name": "recorder event notebook_snapshot",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000001,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_snapshot",
+      "payload": {
+        "path": "analysis.ipynb",
+        "notebookMetadata": {},
+        "kernelName": "python3",
+        "language": "python",
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ]
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "authorHint": "blaym"
+    }
+  },
+  {
+    "name": "recorder event cell_inserted",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000002,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_inserted",
+      "payload": {
+        "cellId": "cell-2",
+        "index": 1,
+        "cellType": "markdown",
+        "code": "# Title",
+        "revision": 1,
+        "metadata": {}
+      },
+      "authorHint": "person",
+      "links": {
+        "cellId": "cell-2",
+        "cellRevision": 1
+      }
+    }
+  },
+  {
+    "name": "recorder event cell_deleted",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000003,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_deleted",
+      "payload": {
+        "cellId": "cell-2"
+      }
+    }
+  },
+  {
+    "name": "recorder event cell_moved",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0004",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000004,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_moved",
+      "payload": {
+        "cellId": "cell-2",
+        "fromIndex": 1,
+        "toIndex": 0
+      }
+    }
+  },
+  {
+    "name": "recorder event cell_type_changed",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0005",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000005,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_type_changed",
+      "payload": {
+        "cellId": "cell-2",
+        "cellType": "raw"
+      }
+    }
+  },
+  {
+    "name": "recorder event cell_source_changed",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000006,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_source_changed",
+      "payload": {
+        "cellId": "cell-1",
+        "revision": 3,
+        "code": "print('hi')"
+      },
+      "authorHint": "ai",
+      "links": {
+        "chatTurnId": "turn-1",
+        "cellId": "cell-1",
+        "cellRevision": 3
+      }
+    }
+  },
+  {
+    "name": "recorder event cell_metadata_changed",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000007,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_metadata_changed",
+      "payload": {
+        "cellId": "cell-1",
+        "metadata": {
+          "tags": []
+        }
+      }
+    }
+  },
+  {
+    "name": "recorder event notebook_metadata_changed",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0008",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000008,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_metadata_changed",
+      "payload": {
+        "metadata": {
+          "title": "x"
+        }
+      }
+    }
+  },
+  {
+    "name": "recorder event run_started",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0009",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000009,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "run_started",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "cellRevision": 3,
+        "runCount": 2
+      },
+      "links": {
+        "runId": "run-2"
+      }
+    }
+  },
+  {
+    "name": "recorder event run_finished",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000a",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000010,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "run_finished",
+      "payload": {
+        "runId": "run-2",
+        "status": "ok"
+      }
+    }
+  },
+  {
+    "name": "recorder event output_added",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000b",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000011,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "output_added",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "outputIndex": 0,
+        "item": {
+          "outputType": "stream",
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "contentHash": "sha256:ab12",
+          "preview": "hello",
+          "truncated": false,
+          "sizeBytes": 5,
+          "searchText": "hello"
+        }
+      }
+    }
+  },
+  {
+    "name": "recorder event output_replaced",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000c",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000012,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "output_replaced",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "outputIndex": 0,
+        "item": {
+          "outputType": "stream",
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "contentHash": "sha256:ab12",
+          "preview": "hello",
+          "truncated": false,
+          "sizeBytes": 5,
+          "searchText": "hello"
+        }
+      }
+    }
+  },
+  {
+    "name": "recorder event outputs_cleared",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000d",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000013,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "outputs_cleared",
+      "payload": {
+        "runId": "run-2",
+        "cellId": "cell-1",
+        "wait": true
+      }
+    }
+  },
+  {
+    "name": "recorder event kernel_started",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000e",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000014,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "kernel_started",
+      "payload": {
+        "kernelId": "kernel-1",
+        "kernelName": "python3",
+        "language": "python"
+      }
+    }
+  },
+  {
+    "name": "recorder event kernel_restarted",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000015,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "kernel_restarted",
+      "payload": {
+        "kernelId": "kernel-1",
+        "reason": "unknown"
+      }
+    }
+  },
+  {
+    "name": "recorder event notebook_renamed",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000016,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_renamed",
+      "payload": {
+        "oldPath": "analysis.ipynb",
+        "newPath": "analysis2.ipynb"
+      }
+    }
+  },
+  {
+    "name": "recorder event notebook_copied",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0011",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000017,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "notebook_copied",
+      "payload": {
+        "oldPath": "analysis.ipynb",
+        "newPath": "copy.ipynb",
+        "newExplorationId": "exploration-2"
+      }
+    }
+  },
+  {
+    "name": "recorder event changed_outside_editor",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0012",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000018,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "changed_outside_editor",
+      "payload": {
+        "path": "analysis.ipynb",
+        "notebookMetadata": {},
+        "kernelName": "python3",
+        "language": "python",
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ]
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "authorHint": "outside"
+    }
+  },
+  {
+    "name": "recorder event chat_message_added",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000019,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "chat_message_added",
+      "payload": {
+        "chatSource": "jupyter-ai",
+        "messageId": "msg-1",
+        "sender": "persona-claude",
+        "senderKind": "agent",
+        "body": "Done.",
+        "chatTimeMs": 1760000000500,
+        "agentSessionId": "session-1"
+      }
+    }
+  },
+  {
+    "name": "recorder event chat_message_updated",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000020,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "chat_message_updated",
+      "payload": {
+        "chatSource": "jupyter-ai",
+        "messageId": "msg-1",
+        "body": "Done. More."
+      }
+    }
+  },
+  {
+    "name": "recorder event branch_point_created",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0015",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000021,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "branch_point_created",
+      "payload": {
+        "parentBranchId": "branch-main",
+        "parentTick": 6,
+        "name": "try b"
+      }
+    }
+  },
+  {
+    "name": "recorder event recording_gap_started",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000022,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "recording_gap_started",
+      "payload": {
+        "gapId": "gap-1",
+        "source": "browser",
+        "reason": "no_client"
+      }
+    }
+  },
+  {
+    "name": "recorder event recording_gap_ended",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000023,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "recording_gap_ended",
+      "payload": {
+        "gapId": "gap-1"
+      }
+    }
+  },
+  {
+    "name": "state with clearPending",
+    "contract": "RebuiltState",
+    "value": {
+      "schemaVersion": 2,
+      "position": {
+        "branchId": "branch-main",
+        "tick": 20,
+        "lastEventTick": 20,
+        "branchCount": 20
+      },
+      "notebook": {
+        "path": "analysis.ipynb",
+        "metadata": {},
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ],
+                "clearPending": true
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "runs": [
+        {
+          "runId": "run-1",
+          "cellId": "cell-1",
+          "cellRevision": 2,
+          "runCount": 1,
+          "status": "unfinished",
+          "startedTick": 5,
+          "endedTick": 9
+        }
+      ],
+      "chat": [
+        {
+          "chatSource": "jupyter-ai",
+          "messageId": "msg-1",
+          "sender": "persona-claude",
+          "senderKind": "agent",
+          "body": "Done.",
+          "chatTimeMs": 1760000000500,
+          "agentSessionId": "session-1",
+          "addedTick": 19
+        }
+      ],
+      "kernel": {
+        "status": "running",
+        "kernelId": "kernel-1",
+        "kernelName": "python3",
+        "language": "python",
+        "lastRestart": {
+          "kernelId": "kernel-1",
+          "reason": "unknown",
+          "tick": 15
+        }
+      },
+      "gaps": [
+        {
+          "gapId": "gap-1",
+          "source": "browser",
+          "reason": "no_client",
+          "startedTick": 12,
+          "endedTick": 14
+        }
+      ],
+      "detachedOutputs": [
+        {
+          "runId": "run-1",
+          "items": [
+            {
+              "outputType": "stream",
+              "mimeTypes": [
+                "text/plain"
+              ],
+              "contentHash": "sha256:ab12",
+              "preview": "hello",
+              "truncated": false,
+              "sizeBytes": 5,
+              "searchText": "hello"
+            }
+          ]
+        }
+      ],
+      "lastOutsideChange": {
+        "tick": 18
+      }
+    }
+  },
+  {
+    "name": "state",
+    "contract": "RebuiltState",
+    "value": {
+      "schemaVersion": 2,
+      "position": {
+        "branchId": "branch-main",
+        "tick": 20,
+        "lastEventTick": 20,
+        "branchCount": 20
+      },
+      "notebook": {
+        "path": "analysis.ipynb",
+        "metadata": {},
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ]
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "runs": [
+        {
+          "runId": "run-1",
+          "cellId": "cell-1",
+          "cellRevision": 2,
+          "runCount": 1,
+          "status": "unfinished",
+          "startedTick": 5,
+          "endedTick": 9
+        }
+      ],
+      "chat": [
+        {
+          "chatSource": "jupyter-ai",
+          "messageId": "msg-1",
+          "sender": "persona-claude",
+          "senderKind": "agent",
+          "body": "Done.",
+          "chatTimeMs": 1760000000500,
+          "agentSessionId": "session-1",
+          "addedTick": 19
+        }
+      ],
+      "kernel": {
+        "status": "running",
+        "kernelId": "kernel-1",
+        "kernelName": "python3",
+        "language": "python",
+        "lastRestart": {
+          "kernelId": "kernel-1",
+          "reason": "unknown",
+          "tick": 15
+        }
+      },
+      "gaps": [
+        {
+          "gapId": "gap-1",
+          "source": "browser",
+          "reason": "no_client",
+          "startedTick": 12,
+          "endedTick": 14
+        }
+      ],
+      "detachedOutputs": [
+        {
+          "runId": "run-1",
+          "items": [
+            {
+              "outputType": "stream",
+              "mimeTypes": [
+                "text/plain"
+              ],
+              "contentHash": "sha256:ab12",
+              "preview": "hello",
+              "truncated": false,
+              "sizeBytes": 5,
+              "searchText": "hello"
+            }
+          ]
+        }
+      ],
+      "lastOutsideChange": {
+        "tick": 18
+      }
+    }
+  },
+  {
+    "name": "state minimal (empty lists, no optional fields)",
+    "contract": "RebuiltState",
+    "value": {
+      "schemaVersion": 2,
+      "position": {
+        "branchId": "branch-main",
+        "tick": 1,
+        "lastEventTick": 1,
+        "branchCount": 1
+      },
+      "notebook": {
+        "path": "analysis.ipynb",
+        "metadata": {},
+        "cells": []
+      },
+      "runs": [],
+      "chat": [],
+      "kernel": {
+        "status": "unknown",
+        "kernelName": "python3",
+        "language": "python"
+      },
+      "gaps": [],
+      "detachedOutputs": []
+    }
+  },
+  {
+    "name": "state with detached output pending clear",
+    "contract": "RebuiltState",
+    "value": {
+      "schemaVersion": 2,
+      "position": {
+        "branchId": "branch-main",
+        "tick": 20,
+        "lastEventTick": 20,
+        "branchCount": 20
+      },
+      "notebook": {
+        "path": "analysis.ipynb",
+        "metadata": {},
+        "cells": [
+          {
+            "cellId": "cell-1",
+            "cellType": "code",
+            "code": "print('hello')",
+            "revision": 2,
+            "metadata": {
+              "tags": [
+                "demo"
+              ]
+            },
+            "outputs": [
+              {
+                "runId": "run-1",
+                "items": [
+                  {
+                    "outputType": "stream",
+                    "mimeTypes": [
+                      "text/plain"
+                    ],
+                    "contentHash": "sha256:ab12",
+                    "preview": "hello",
+                    "truncated": false,
+                    "sizeBytes": 5,
+                    "searchText": "hello"
+                  }
+                ]
+              }
+            ],
+            "runCount": 1
+          }
+        ]
+      },
+      "runs": [
+        {
+          "runId": "run-1",
+          "cellId": "cell-1",
+          "cellRevision": 2,
+          "runCount": 1,
+          "status": "unfinished",
+          "startedTick": 5,
+          "endedTick": 9
+        }
+      ],
+      "chat": [
+        {
+          "chatSource": "jupyter-ai",
+          "messageId": "msg-1",
+          "sender": "persona-claude",
+          "senderKind": "agent",
+          "body": "Done.",
+          "chatTimeMs": 1760000000500,
+          "agentSessionId": "session-1",
+          "addedTick": 19
+        }
+      ],
+      "kernel": {
+        "status": "running",
+        "kernelId": "kernel-1",
+        "kernelName": "python3",
+        "language": "python",
+        "lastRestart": {
+          "kernelId": "kernel-1",
+          "reason": "unknown",
+          "tick": 15
+        }
+      },
+      "gaps": [
+        {
+          "gapId": "gap-1",
+          "source": "browser",
+          "reason": "no_client",
+          "startedTick": 12,
+          "endedTick": 14
+        }
+      ],
+      "detachedOutputs": [
+        {
+          "runId": "run-1",
+          "items": [
+            {
+              "outputType": "stream",
+              "mimeTypes": [
+                "text/plain"
+              ],
+              "contentHash": "sha256:ab12",
+              "preview": "hello",
+              "truncated": false,
+              "sizeBytes": 5,
+              "searchText": "hello"
+            }
+          ],
+          "clearPending": true
+        }
+      ],
+      "lastOutsideChange": {
+        "tick": 18
+      }
+    }
+  },
+  {
+    "name": "generic envelope",
+    "contract": "BlaymEventEnvelope",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0018",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 1,
+      "wallTimeMs": 1760000000001,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "s0_sample",
+      "payload": {
+        "hello": "world"
+      },
+      "links": {
+        "runId": "run-1",
+        "cellId": "cell-1",
+        "cellRevision": 1
+      }
+    }
+  },
+  {
+    "name": "outline",
+    "contract": "HistoryOutline",
+    "value": {
+      "schemaVersion": 2,
+      "explorationId": "exploration-1",
+      "rootBranchId": "branch-main",
+      "highestTick": 9,
+      "branches": [
+        {
+          "branchId": "branch-main",
+          "name": "main",
+          "ownTicks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            8
+          ],
+          "runSpans": [
+            {
+              "runId": "run-1",
+              "startedTick": 2,
+              "endedTick": 4
+            },
+            {
+              "runId": "run-2",
+              "startedTick": 5
+            }
+          ]
+        },
+        {
+          "branchId": "branch-b",
+          "name": "try again",
+          "parentBranchId": "branch-main",
+          "parentTick": 4,
+          "ownTicks": [
+            6,
+            7,
+            9
+          ],
+          "runSpans": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "outline minimal",
+    "contract": "HistoryOutline",
+    "value": {
+      "schemaVersion": 2,
+      "explorationId": "exploration-1",
+      "rootBranchId": "branch-main",
+      "highestTick": 1,
+      "branches": [
+        {
+          "branchId": "branch-main",
+          "name": "main",
+          "ownTicks": [
+            1
+          ],
+          "runSpans": []
+        }
+      ]
+    }
+  },
+  {
+    "name": "history advanced",
+    "contract": "HistoryAdvanced",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 10
+    }
+  },
+  {
+    "name": "history advanced with run started",
+    "contract": "HistoryAdvanced",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 10,
+      "runStarted": "run-3"
+    }
+  },
+  {
+    "name": "history advanced with runs ended",
+    "contract": "HistoryAdvanced",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 10,
+      "runsEnded": [
+        "run-1",
+        "run-2"
+      ]
+    }
+  },
+  {
+    "name": "history advanced with no runs ended",
+    "contract": "HistoryAdvanced",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 10,
+      "runsEnded": []
+    }
+  },
+  {
+    "name": "history advanced with new branch",
+    "contract": "HistoryAdvanced",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-c",
+      "tick": 10,
+      "newBranch": {
+        "branchId": "branch-c",
+        "name": "c",
+        "parentBranchId": "branch-main",
+        "parentTick": 8,
+        "ownTicks": [
+          10
+        ],
+        "runSpans": []
+      }
+    }
+  }
+]

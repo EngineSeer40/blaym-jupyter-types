@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling>=1.5.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "blaym-jupyter-types"
+version = "0.1.0"
+description = "Shared Blaym Jupyter contracts: Pydantic models and JSON Schema"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2"]
+
+[project.optional-dependencies]
+dev = [
+    # Pinned: generated output depends on these exact versions (python:check).
+    "datamodel-code-generator==0.99.0",
+    "black==26.10.1",
+    "isort==8.0.1",
+    "pytest",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["python/blaym_jupyter_types"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"fixtures/contracts" = "blaym_jupyter_types/fixtures/contracts"
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"]

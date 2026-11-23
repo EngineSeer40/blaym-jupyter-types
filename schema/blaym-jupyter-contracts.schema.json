@@ -1,0 +1,4887 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AuthorConfidence": {
+      "description": "How sure Blaym is about `authorHint`. `known` when the editor or tool gives a signal (for example an AI action announcement, or an agent edit matched to its saved chat turn); `guess` when inferred (for example by timing). Leave it out with `authorHint: 'unknown'`. The UI says when it is a guess.",
+      "enum": [
+        "known",
+        "guess"
+      ],
+      "type": "string"
+    },
+    "AuthorHint": {
+      "description": "Who made a change, as far as Blaym can tell. How sure it is, is in `authorConfidence`; with `unknown` there is nothing to be sure about.",
+      "enum": [
+        "person",
+        "ai",
+        "outside",
+        "blaym",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "BlaymEvent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NotebookSnapshot"
+        },
+        {
+          "$ref": "#/definitions/CellInserted"
+        },
+        {
+          "$ref": "#/definitions/CellDeleted"
+        },
+        {
+          "$ref": "#/definitions/CellMoved"
+        },
+        {
+          "$ref": "#/definitions/CellTypeChanged"
+        },
+        {
+          "$ref": "#/definitions/CellSourceChanged"
+        },
+        {
+          "$ref": "#/definitions/CellMetadataChanged"
+        },
+        {
+          "$ref": "#/definitions/NotebookMetadataChanged"
+        },
+        {
+          "$ref": "#/definitions/RunStarted"
+        },
+        {
+          "$ref": "#/definitions/RunFinished"
+        },
+        {
+          "$ref": "#/definitions/OutputAdded"
+        },
+        {
+          "$ref": "#/definitions/OutputReplaced"
+        },
+        {
+          "$ref": "#/definitions/OutputsCleared"
+        },
+        {
+          "$ref": "#/definitions/KernelStarted"
+        },
+        {
+          "$ref": "#/definitions/KernelRestarted"
+        },
+        {
+          "$ref": "#/definitions/NotebookRenamed"
+        },
+        {
+          "$ref": "#/definitions/NotebookCopied"
+        },
+        {
+          "$ref": "#/definitions/ChangedOutsideEditor"
+        },
+        {
+          "$ref": "#/definitions/ChatMessageAdded"
+        },
+        {
+          "$ref": "#/definitions/ChatMessageUpdated"
+        },
+        {
+          "$ref": "#/definitions/BranchPointCreated"
+        },
+        {
+          "$ref": "#/definitions/RecordingGapStarted"
+        },
+        {
+          "$ref": "#/definitions/RecordingGapEnded"
+        }
+      ],
+      "description": "Every event Blaym records, told apart by `type`."
+    },
+    "BlaymEventEnvelope": {
+      "additionalProperties": false,
+      "description": "The generic envelope: any event, with the type and payload left open. Use it to check the envelope before looking at the payload.",
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "BranchPointCreated": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/BranchPointCreatedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "branch_point_created",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "BranchPointCreatedPayload": {
+      "additionalProperties": false,
+      "description": "The envelope `branchId` is the NEW branch: this is the first event of that branch. Its line is the parent's events up to `parentTick`, then its own.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "parentBranchId": {
+          "type": "string"
+        },
+        "parentTick": {
+          "description": "The last parent event the branch includes (at least 1: the first event is always a snapshot).",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "parentBranchId",
+        "parentTick",
+        "name"
+      ],
+      "type": "object"
+    },
+    "CellDeleted": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellDeletedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_deleted",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellDeletedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cellId"
+      ],
+      "type": "object"
+    },
+    "CellInserted": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellInsertedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_inserted",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellInsertedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "cellType": {
+          "$ref": "#/definitions/CellType"
+        },
+        "code": {
+          "type": "string"
+        },
+        "index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "metadata": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "outputs": {
+          "description": "For cells that arrive with outputs and no run (a paste, or an AI tool inserting a cell with outputs). Shown as the cell's outputs, linked to no run: the rebuilder groups them under `pasted:<eventId>` (see `RunOutputs.runId`).",
+          "items": {
+            "$ref": "#/definitions/OutputItem"
+          },
+          "type": "array"
+        },
+        "revision": {
+          "description": "Always 1 for a new cell.",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cellId",
+        "index",
+        "cellType",
+        "code",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "CellMetadataChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellMetadataChangedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_metadata_changed",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellMetadataChangedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": {},
+          "description": "The cell's whole new (allowed) metadata.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "cellId",
+        "metadata"
+      ],
+      "type": "object"
+    },
+    "CellMoved": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellMovedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_moved",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellMovedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "fromIndex": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "toIndex": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cellId",
+        "fromIndex",
+        "toIndex"
+      ],
+      "type": "object"
+    },
+    "CellSourceChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellSourceChangedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_source_changed",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellSourceChangedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "code": {
+          "description": "The cell's whole new code, not a patch.",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Exactly the previous revision + 1.",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cellId",
+        "revision",
+        "code"
+      ],
+      "type": "object"
+    },
+    "CellType": {
+      "enum": [
+        "code",
+        "markdown",
+        "raw"
+      ],
+      "type": "string"
+    },
+    "CellTypeChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellTypeChangedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_type_changed",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellTypeChangedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "cellType": {
+          "$ref": "#/definitions/CellType"
+        }
+      },
+      "required": [
+        "cellId",
+        "cellType"
+      ],
+      "type": "object"
+    },
+    "ChangedOutsideEditor": {
+      "additionalProperties": false,
+      "description": "The notebook as found in the file. The rebuilder replaces the notebook with it. `authorHint` is always `outside`. The UI may still call it \"changed outside Jupyter\" in JupyterLab.",
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "const": "outside",
+          "type": "string"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/NotebookSnapshotPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "changed_outside_editor",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "authorHint",
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "ChatMessageAdded": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/ChatMessageAddedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "chat_message_added",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "ChatMessageAddedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "chatSource": {
+          "description": "The chat reader, for example `jupyter-ai` or `vscode-copilot`.",
+          "type": "string"
+        },
+        "chatTimeMs": {
+          "description": "Time from the chat, in milliseconds.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "messageId": {
+          "description": "The message's id in its source; unique within its `chatSource`.",
+          "type": "string"
+        },
+        "sender": {
+          "description": "The person's id, or the agent persona id.",
+          "type": "string"
+        },
+        "senderKind": {
+          "$ref": "#/definitions/ChatSenderKind"
+        }
+      },
+      "required": [
+        "chatSource",
+        "messageId",
+        "sender",
+        "senderKind",
+        "body",
+        "chatTimeMs"
+      ],
+      "type": "object"
+    },
+    "ChatMessageState": {
+      "additionalProperties": false,
+      "properties": {
+        "addedTick": {
+          "description": "Tick of the event that added it.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "agentSessionId": {
+          "type": "string"
+        },
+        "body": {
+          "description": "The latest body.",
+          "type": "string"
+        },
+        "chatSource": {
+          "type": "string"
+        },
+        "chatTimeMs": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "messageId": {
+          "type": "string"
+        },
+        "sender": {
+          "type": "string"
+        },
+        "senderKind": {
+          "$ref": "#/definitions/ChatSenderKind"
+        }
+      },
+      "required": [
+        "chatSource",
+        "messageId",
+        "sender",
+        "senderKind",
+        "body",
+        "chatTimeMs",
+        "addedTick"
+      ],
+      "type": "object"
+    },
+    "ChatMessageUpdated": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/ChatMessageUpdatedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "chat_message_updated",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "ChatMessageUpdatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "description": "The message's whole new body (a streamed reply growing).",
+          "type": "string"
+        },
+        "chatSource": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chatSource",
+        "messageId",
+        "body"
+      ],
+      "type": "object"
+    },
+    "ChatSenderKind": {
+      "enum": [
+        "person",
+        "agent"
+      ],
+      "type": "string"
+    },
+    "Editor": {
+      "description": "Which editor recorded an event.",
+      "enum": [
+        "jupyterlab",
+        "notebook7",
+        "vscode",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "EventBase": {
+      "additionalProperties": false,
+      "description": "Fields every event has.",
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "eventId",
+        "explorationId",
+        "branchId",
+        "tick",
+        "wallTimeMs",
+        "userId",
+        "workspaceId",
+        "originId"
+      ],
+      "type": "object"
+    },
+    "EventLinks": {
+      "additionalProperties": false,
+      "description": "Where an event came from in the notebook, run, or chat.",
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "cellRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "chatTurnId": {
+          "type": "string"
+        },
+        "runId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GapReason": {
+      "description": "Why a recorder could not see (ADR 0005).",
+      "enum": [
+        "no_client",
+        "kernel_restart",
+        "server_unavailable",
+        "source_closed",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "GapSource": {
+      "description": "Which recorder could not see something (ADR 0005).",
+      "enum": [
+        "browser",
+        "kernel",
+        "chat",
+        "files",
+        "service"
+      ],
+      "type": "string"
+    },
+    "GapState": {
+      "additionalProperties": false,
+      "properties": {
+        "endedTick": {
+          "description": "Absent while the gap is open.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "gapId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/GapReason"
+        },
+        "source": {
+          "$ref": "#/definitions/GapSource"
+        },
+        "startedTick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "gapId",
+        "source",
+        "reason",
+        "startedTick"
+      ],
+      "type": "object"
+    },
+    "HistoryAdvanced": {
+      "additionalProperties": false,
+      "description": "Sent when new history is stored. It only says what is new; the receiver asks for whatever it is missing.",
+      "properties": {
+        "branchId": {
+          "description": "The branch that received the new event.",
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "newBranch": {
+          "$ref": "#/definitions/OutlineBranch",
+          "description": "Present when the new event created a branch. Its entry already carries the spans it inherits."
+        },
+        "runStarted": {
+          "description": "Present when the new event started a run: the id of the run whose span starts at this tick on `branchId`.",
+          "type": "string"
+        },
+        "runsEnded": {
+          "description": "Present when the new event closed runs: the ids of the runs whose span on `branchId`'s line ends at this tick. A finished run closes one; a kernel restart closes every run still open on that line, so it may list several. Only runs listed in that branch's `runSpans` are meant.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tick": {
+          "description": "The new highest stored tick.",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "explorationId",
+        "branchId",
+        "tick"
+      ],
+      "type": "object"
+    },
+    "HistoryOutline": {
+      "additionalProperties": false,
+      "description": "The shape of a notebook's history: its branches, which tick belongs to which branch, and where runs started and finished. It is derived from the recorded events and can always be rebuilt from them. It holds no notebook content, so it is small enough to send whole.",
+      "properties": {
+        "branches": {
+          "items": {
+            "$ref": "#/definitions/OutlineBranch"
+          },
+          "type": "array"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "highestTick": {
+          "description": "The highest stored tick that has no missing tick below it.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "rootBranchId": {
+          "type": "string"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "explorationId",
+        "rootBranchId",
+        "highestTick",
+        "branches"
+      ],
+      "type": "object"
+    },
+    "InvalidEventReason": {
+      "description": "Why an event cannot apply to the history built so far.",
+      "enum": [
+        "first_event_not_snapshot",
+        "tick_clash",
+        "duplicate_id",
+        "unknown_run",
+        "run_not_running",
+        "unknown_message",
+        "unknown_gap",
+        "gap_already_ended",
+        "no_output_at_index",
+        "index_out_of_range",
+        "position_mismatch",
+        "invalid_branch_point",
+        "run_cell_mismatch"
+      ],
+      "type": "string"
+    },
+    "KernelRestartMarker": {
+      "additionalProperties": false,
+      "properties": {
+        "kernelId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/RestartReason"
+        },
+        "tick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kernelId",
+        "reason",
+        "tick"
+      ],
+      "type": "object"
+    },
+    "KernelRestarted": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/KernelRestartedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "kernel_restarted",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "KernelRestartedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "kernelId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/RestartReason"
+        }
+      },
+      "required": [
+        "kernelId",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "KernelStarted": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/KernelStartedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "kernel_started",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "KernelStartedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "kernelId": {
+          "type": "string"
+        },
+        "kernelName": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kernelId",
+        "kernelName",
+        "language"
+      ],
+      "type": "object"
+    },
+    "KernelState": {
+      "additionalProperties": false,
+      "properties": {
+        "kernelId": {
+          "type": "string"
+        },
+        "kernelName": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "lastRestart": {
+          "$ref": "#/definitions/KernelRestartMarker"
+        },
+        "status": {
+          "$ref": "#/definitions/KernelStatus"
+        }
+      },
+      "required": [
+        "status",
+        "kernelName",
+        "language"
+      ],
+      "type": "object"
+    },
+    "KernelStatus": {
+      "enum": [
+        "unknown",
+        "running"
+      ],
+      "type": "string"
+    },
+    "NotebookCell": {
+      "additionalProperties": false,
+      "description": "A cell as it is in a snapshot and in the rebuilt state. `outputs` are grouped by the run that produced them; the latest run is what Jupyter shows.",
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "cellType": {
+          "$ref": "#/definitions/CellType"
+        },
+        "code": {
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "outputs": {
+          "items": {
+            "$ref": "#/definitions/RunOutputs"
+          },
+          "type": "array"
+        },
+        "revision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runCount": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cellId",
+        "cellType",
+        "code",
+        "revision",
+        "metadata",
+        "outputs"
+      ],
+      "type": "object"
+    },
+    "NotebookCopied": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/NotebookCopiedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "notebook_copied",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "NotebookCopiedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "newExplorationId": {
+          "description": "A copy starts a new history.",
+          "type": "string"
+        },
+        "newPath": {
+          "type": "string"
+        },
+        "oldPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "oldPath",
+        "newPath",
+        "newExplorationId"
+      ],
+      "type": "object"
+    },
+    "NotebookMetadataChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/NotebookMetadataChangedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "notebook_metadata_changed",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "NotebookMetadataChangedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "additionalProperties": {},
+          "description": "The notebook's whole new (allowed) metadata.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "metadata"
+      ],
+      "type": "object"
+    },
+    "NotebookRenamed": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/NotebookRenamedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "notebook_renamed",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "NotebookRenamedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "newPath": {
+          "type": "string"
+        },
+        "oldPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "oldPath",
+        "newPath"
+      ],
+      "type": "object"
+    },
+    "NotebookSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/NotebookSnapshotPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "notebook_snapshot",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "NotebookSnapshotPayload": {
+      "additionalProperties": false,
+      "description": "The whole notebook. Also the shape of an outside change.",
+      "properties": {
+        "cells": {
+          "items": {
+            "$ref": "#/definitions/NotebookCell"
+          },
+          "type": "array"
+        },
+        "kernelName": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "notebookMetadata": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "notebookMetadata",
+        "kernelName",
+        "language",
+        "cells"
+      ],
+      "type": "object"
+    },
+    "NotebookState": {
+      "additionalProperties": false,
+      "properties": {
+        "cells": {
+          "items": {
+            "$ref": "#/definitions/NotebookCell"
+          },
+          "type": "array"
+        },
+        "metadata": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "metadata",
+        "cells"
+      ],
+      "type": "object"
+    },
+    "OutlineBranch": {
+      "additionalProperties": false,
+      "description": "One branch in the outline. The root branch has no parent; every other branch names its parent and the parent's last tick that it includes.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ownTicks": {
+          "description": "Ticks of this branch's own events, sorted from lowest to highest, none twice.",
+          "items": {
+            "$ref": "#/definitions/Tick"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "parentBranchId": {
+          "type": "string"
+        },
+        "parentTick": {
+          "description": "The parent's last tick included in this branch. Absent only for the root.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runSpans": {
+          "description": "The runs that matter on this branch's own part of its line: runs started on its own events, plus runs started on an ancestor that were still open at this branch's branch point (their `startedTick` lies on the parent's part of the line). Runs that closed before the branch point are not listed; for a moment at or before the branch point, the spans of the ancestor that owns that tick apply. This lets a branch only be started from a settled moment.",
+          "items": {
+            "$ref": "#/definitions/OutlineRunSpan"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "branchId",
+        "name",
+        "ownTicks",
+        "runSpans"
+      ],
+      "type": "object"
+    },
+    "OutlineRunSpan": {
+      "additionalProperties": false,
+      "description": "A run on one branch, from the tick it started to the tick it finished.",
+      "properties": {
+        "endedTick": {
+          "description": "Absent while the run is still open on this branch's line. Otherwise the first tick on this branch's line that closes the run (its finish, or a kernel restart). It is not before `startedTick`.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runId": {
+          "type": "string"
+        },
+        "startedTick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "runId",
+        "startedTick"
+      ],
+      "type": "object"
+    },
+    "OutputAdded": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/OutputAddedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "output_added",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "OutputAddedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "item": {
+          "$ref": "#/definitions/OutputItem"
+        },
+        "outputIndex": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "runId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "runId",
+        "cellId",
+        "outputIndex",
+        "item"
+      ],
+      "type": "object"
+    },
+    "OutputItem": {
+      "additionalProperties": false,
+      "description": "One output item: a preview and a content hash, never the full bytes.",
+      "properties": {
+        "contentHash": {
+          "description": "Hash of the full content (large content lives beside the history).",
+          "type": "string"
+        },
+        "mimeTypes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outputType": {
+          "$ref": "#/definitions/OutputType"
+        },
+        "preview": {
+          "description": "Inline preview, possibly shortened.",
+          "type": "string"
+        },
+        "searchText": {
+          "description": "Search text; filled by the recorder (S5), empty until then.",
+          "type": "string"
+        },
+        "sizeBytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "outputType",
+        "mimeTypes",
+        "contentHash",
+        "preview",
+        "truncated",
+        "sizeBytes"
+      ],
+      "type": "object"
+    },
+    "OutputReplaced": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/OutputReplacedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "output_replaced",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "OutputReplacedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "item": {
+          "$ref": "#/definitions/OutputItem"
+        },
+        "outputIndex": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "runId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "runId",
+        "cellId",
+        "outputIndex",
+        "item"
+      ],
+      "type": "object"
+    },
+    "OutputType": {
+      "enum": [
+        "stream",
+        "display_data",
+        "execute_result",
+        "error"
+      ],
+      "type": "string"
+    },
+    "OutputsCleared": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/OutputsClearedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "outputs_cleared",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "OutputsClearedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "runId": {
+          "type": "string"
+        },
+        "wait": {
+          "description": "\"Clear and wait\": the clear takes effect when the next output arrives.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "runId",
+        "cellId",
+        "wait"
+      ],
+      "type": "object"
+    },
+    "OutsideChangeMarker": {
+      "additionalProperties": false,
+      "properties": {
+        "tick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tick"
+      ],
+      "type": "object"
+    },
+    "RebuildConflict": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "type": "string"
+        },
+        "first": {
+          "$ref": "#/definitions/BlaymEvent",
+          "description": "The event as first stored."
+        },
+        "second": {
+          "$ref": "#/definitions/BlaymEvent",
+          "description": "The event with the same id but different content."
+        },
+        "status": {
+          "const": "conflict",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "eventId",
+        "first",
+        "second"
+      ],
+      "type": "object"
+    },
+    "RebuildInvalidEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "description": "A short plain-language explanation.",
+          "type": "string"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/InvalidEventReason"
+        },
+        "status": {
+          "const": "invalid_event",
+          "type": "string"
+        },
+        "tick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "status",
+        "eventId",
+        "tick",
+        "reason",
+        "detail"
+      ],
+      "type": "object"
+    },
+    "RebuildInvalidRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "actualRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "cellId": {
+          "type": "string"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "expectedRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "status": {
+          "const": "invalid_revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "eventId",
+        "cellId",
+        "expectedRevision",
+        "actualRevision"
+      ],
+      "type": "object"
+    },
+    "RebuildLineageLoop": {
+      "additionalProperties": false,
+      "properties": {
+        "branchIds": {
+          "description": "The branches that form the loop.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "const": "lineage_loop",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "branchIds"
+      ],
+      "type": "object"
+    },
+    "RebuildMissingEvents": {
+      "additionalProperties": false,
+      "properties": {
+        "firstMissingTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "status": {
+          "const": "missing_events",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "firstMissingTick"
+      ],
+      "type": "object"
+    },
+    "RebuildOk": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/RebuiltState"
+        },
+        "status": {
+          "const": "ok",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "state"
+      ],
+      "type": "object"
+    },
+    "RebuildResult": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RebuildOk"
+        },
+        {
+          "$ref": "#/definitions/RebuildMissingEvents"
+        },
+        {
+          "$ref": "#/definitions/RebuildConflict"
+        },
+        {
+          "$ref": "#/definitions/RebuildInvalidRevision"
+        },
+        {
+          "$ref": "#/definitions/RebuildUnknownCell"
+        },
+        {
+          "$ref": "#/definitions/RebuildUnknownBranch"
+        },
+        {
+          "$ref": "#/definitions/RebuildLineageLoop"
+        },
+        {
+          "$ref": "#/definitions/RebuildInvalidEvent"
+        }
+      ]
+    },
+    "RebuildUnknownBranch": {
+      "additionalProperties": false,
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "status": {
+          "const": "unknown_branch",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "branchId"
+      ],
+      "type": "object"
+    },
+    "RebuildUnknownCell": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "status": {
+          "const": "unknown_cell",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "eventId",
+        "cellId"
+      ],
+      "type": "object"
+    },
+    "RebuiltState": {
+      "additionalProperties": false,
+      "description": "The full state at a position. Nothing in it depends on how it was computed.",
+      "properties": {
+        "chat": {
+          "items": {
+            "$ref": "#/definitions/ChatMessageState"
+          },
+          "type": "array"
+        },
+        "detachedOutputs": {
+          "description": "Output groups of runs whose cell no longer exists, shown in review as \"output from a deleted cell\". A run's output events address the run, so output that arrives after its cell was deleted is kept here, not dropped.",
+          "items": {
+            "$ref": "#/definitions/RunOutputs"
+          },
+          "type": "array"
+        },
+        "gaps": {
+          "items": {
+            "$ref": "#/definitions/GapState"
+          },
+          "type": "array"
+        },
+        "kernel": {
+          "$ref": "#/definitions/KernelState"
+        },
+        "lastOutsideChange": {
+          "$ref": "#/definitions/OutsideChangeMarker"
+        },
+        "notebook": {
+          "$ref": "#/definitions/NotebookState"
+        },
+        "position": {
+          "$ref": "#/definitions/StatePosition"
+        },
+        "runs": {
+          "items": {
+            "$ref": "#/definitions/RunState"
+          },
+          "type": "array"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "position",
+        "notebook",
+        "runs",
+        "chat",
+        "kernel",
+        "gaps",
+        "detachedOutputs"
+      ],
+      "type": "object"
+    },
+    "RecorderEvent": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/NotebookSnapshotPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "notebook_snapshot",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellInsertedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_inserted",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellDeletedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_deleted",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellMovedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_moved",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellTypeChangedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_type_changed",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellSourceChangedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_source_changed",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellMetadataChangedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_metadata_changed",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/NotebookMetadataChangedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "notebook_metadata_changed",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/RunStartedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "run_started",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/RunFinishedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "run_finished",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/OutputAddedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "output_added",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/OutputReplacedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "output_replaced",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/OutputsClearedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "outputs_cleared",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/KernelStartedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "kernel_started",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/KernelRestartedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "kernel_restarted",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/NotebookRenamedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "notebook_renamed",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/NotebookCopiedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "notebook_copied",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "const": "outside",
+              "type": "string"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/NotebookSnapshotPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "changed_outside_editor",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "authorHint",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/ChatMessageAddedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "chat_message_added",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/ChatMessageUpdatedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "chat_message_updated",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/BranchPointCreatedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "branch_point_created",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/RecordingGapStartedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "recording_gap_started",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/RecordingGapEndedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "recording_gap_ended",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "RecordingGapEnded": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/RecordingGapEndedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "recording_gap_ended",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "RecordingGapEndedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "gapId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "gapId"
+      ],
+      "type": "object"
+    },
+    "RecordingGapStarted": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/RecordingGapStartedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "recording_gap_started",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "RecordingGapStartedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "gapId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/GapReason"
+        },
+        "source": {
+          "$ref": "#/definitions/GapSource"
+        }
+      },
+      "required": [
+        "gapId",
+        "source",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "RestartReason": {
+      "description": "`crash` only where the editor reports it; in Jupyter a crash looks like a restart and stays `unknown`.",
+      "enum": [
+        "requested",
+        "crash",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "RunFinishStatus": {
+      "enum": [
+        "ok",
+        "error",
+        "interrupted"
+      ],
+      "type": "string"
+    },
+    "RunFinished": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/RunFinishedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "run_finished",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "RunFinishedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "runId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/RunFinishStatus"
+        }
+      },
+      "required": [
+        "runId",
+        "status"
+      ],
+      "type": "object"
+    },
+    "RunOutputs": {
+      "additionalProperties": false,
+      "description": "The outputs one run produced for a cell.",
+      "properties": {
+        "clearPending": {
+          "description": "Set by `outputs_cleared` with `wait: true`; the next `output_added` for the run replaces `items` and clears the flag (Jupyter's \"clear and wait\").",
+          "type": "boolean"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/OutputItem"
+          },
+          "type": "array"
+        },
+        "runId": {
+          "description": "For outputs that arrived with an inserted cell and no run, `pasted:<eventId>` (the `cell_inserted` event's id), made by the rebuilder, never by a recorder.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "runId",
+        "items"
+      ],
+      "type": "object"
+    },
+    "RunStarted": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/RunStartedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "run_started",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "RunStartedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "cellRevision": {
+          "description": "The revision of the code that was sent to the kernel.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runCount": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "runId",
+        "cellId",
+        "cellRevision",
+        "runCount"
+      ],
+      "type": "object"
+    },
+    "RunState": {
+      "additionalProperties": false,
+      "properties": {
+        "cellId": {
+          "type": "string"
+        },
+        "cellRevision": {
+          "description": "The revision that was sent, even if the cell was edited during the run.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "endedTick": {
+          "description": "Tick of the finish, or of the restart that left it unfinished.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runCount": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runId": {
+          "type": "string"
+        },
+        "startedTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/definitions/RunStatus"
+        }
+      },
+      "required": [
+        "runId",
+        "cellId",
+        "cellRevision",
+        "runCount",
+        "status",
+        "startedTick"
+      ],
+      "type": "object"
+    },
+    "RunStatus": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RunFinishStatus"
+        },
+        {
+          "const": "running",
+          "type": "string"
+        },
+        {
+          "const": "unfinished",
+          "type": "string"
+        }
+      ],
+      "description": "`unfinished`: the run never reported a finish (for example a kernel restart)."
+    },
+    "StatePosition": {
+      "additionalProperties": false,
+      "properties": {
+        "branchCount": {
+          "description": "Which event this is along the branch's line (1 to n), counted up to `lastEventTick`; worked out, not stored.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "branchId": {
+          "type": "string"
+        },
+        "lastEventTick": {
+          "description": "The tick of the last event on the line at or before `tick`; the content reflects this event.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "tick": {
+          "description": "The tick that was asked for (where the user is looking). It may fall between events.",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "branchId",
+        "tick",
+        "lastEventTick",
+        "branchCount"
+      ],
+      "type": "object"
+    },
+    "Tick": {
+      "description": "A positive whole number: the running order of one event.",
+      "minimum": 1,
+      "type": "integer"
+    }
+  }
+}
