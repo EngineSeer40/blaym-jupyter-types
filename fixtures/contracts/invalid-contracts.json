@@ -38622,5 +38622,1413 @@
       "tick": true,
       "duplicate": false
     }
+  },
+  {
+    "name": "gap reason: unknown value",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 22,
+      "wallTimeMs": 1760000000022,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "recording_gap_started",
+      "payload": {
+        "gapId": "gap-1",
+        "source": "browser",
+        "reason": "switched-off"
+      }
+    }
+  },
+  {
+    "name": "ingest refusal reason: unknown value",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "run_in_flight",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "run output group: snapshot runId must be a string",
+    "contract": "RunOutputs",
+    "value": {
+      "runId": 5,
+      "items": []
+    }
+  },
+  {
+    "name": "resolve cell revision request: missing code",
+    "contract": "ResolveCellRevisionRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "cellId": "cell-1"
+    }
+  },
+  {
+    "name": "resolve cell revision request: extra key",
+    "contract": "ResolveCellRevisionRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "cellId": "cell-1",
+      "code": "x = 1",
+      "extra": 1
+    }
+  },
+  {
+    "name": "resolve cell revision request: code null",
+    "contract": "ResolveCellRevisionRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "cellId": "cell-1",
+      "code": null
+    }
+  },
+  {
+    "name": "resolve cell revision response: ok with revision 0",
+    "contract": "ResolveCellRevisionResponse",
+    "value": {
+      "status": "ok",
+      "cellRevision": 0
+    }
+  },
+  {
+    "name": "resolve cell revision response: code differs without current revision",
+    "contract": "ResolveCellRevisionResponse",
+    "value": {
+      "status": "code_differs"
+    }
+  },
+  {
+    "name": "resolve cell revision response: unknown status",
+    "contract": "ResolveCellRevisionResponse",
+    "value": {
+      "status": "maybe"
+    }
+  },
+  {
+    "name": "resolve cell revision response: ok with currentRevision",
+    "contract": "ResolveCellRevisionResponse",
+    "value": {
+      "status": "ok",
+      "cellRevision": 3,
+      "currentRevision": 3
+    }
+  },
+  {
+    "name": "resolve cell revision response: unknown cell with a revision",
+    "contract": "ResolveCellRevisionResponse",
+    "value": {
+      "status": "unknown_cell",
+      "cellRevision": 3
+    }
+  },
+  {
+    "name": "prepare outputs request: 201 outputs",
+    "contract": "PrepareOutputsRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        }
+      ]
+    }
+  },
+  {
+    "name": "prepare outputs request: an output is a string",
+    "contract": "PrepareOutputsRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "outputs": [
+        "stream"
+      ]
+    }
+  },
+  {
+    "name": "prepare outputs request: missing explorationId",
+    "contract": "PrepareOutputsRequest",
+    "value": {
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": "hi\n"
+        }
+      ]
+    }
+  },
+  {
+    "name": "prepare outputs response: missing apiVersion",
+    "contract": "PrepareOutputsResponse",
+    "value": {
+      "items": [
+        {
+          "outputType": "stream",
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "contentHash": "sha256:ab12",
+          "preview": "hello",
+          "truncated": false,
+          "sizeBytes": 5,
+          "searchText": "hello"
+        }
+      ]
+    }
+  },
+  {
+    "name": "prepare outputs response: an item without contentHash",
+    "contract": "PrepareOutputsResponse",
+    "value": {
+      "apiVersion": 1,
+      "items": [
+        {
+          "outputType": "stream",
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "preview": "hello",
+          "truncated": false,
+          "sizeBytes": 5,
+          "searchText": "hello"
+        }
+      ]
+    }
+  },
+  {
+    "name": "prepare outputs response: items not a list",
+    "contract": "PrepareOutputsResponse",
+    "value": {
+      "apiVersion": 1,
+      "items": {
+        "outputType": "stream",
+        "mimeTypes": [
+          "text/plain"
+        ],
+        "contentHash": "sha256:ab12",
+        "preview": "hello",
+        "truncated": false,
+        "sizeBytes": 5,
+        "searchText": "hello"
+      }
+    }
+  },
+  {
+    "name": "notebook registration: missing fingerprint",
+    "contract": "NotebookRegistration",
+    "value": {
+      "path": "analysis.ipynb",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "cellIdsStable": true,
+      "cellAliases": {}
+    }
+  },
+  {
+    "name": "notebook registration: missing cellAliases",
+    "contract": "NotebookRegistration",
+    "value": {
+      "path": "analysis.ipynb",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "cellIdsStable": true,
+      "fingerprint": {
+        "nbformat": "4.5",
+        "sourceHash": "sha256:ab12"
+      }
+    }
+  },
+  {
+    "name": "notebook registration: unknown editor",
+    "contract": "NotebookRegistration",
+    "value": {
+      "path": "analysis.ipynb",
+      "editor": "emacs",
+      "instanceId": "tab-1",
+      "cellIdsStable": true,
+      "fingerprint": {
+        "nbformat": "4.5",
+        "sourceHash": "sha256:ab12"
+      },
+      "cellAliases": {}
+    }
+  },
+  {
+    "name": "notebook registration: fingerprint without sourceHash",
+    "contract": "NotebookRegistration",
+    "value": {
+      "path": "analysis.ipynb",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "cellIdsStable": true,
+      "fingerprint": {
+        "nbformat": "4.5"
+      },
+      "cellAliases": {}
+    }
+  },
+  {
+    "name": "notebook registration: extra key",
+    "contract": "NotebookRegistration",
+    "value": {
+      "path": "analysis.ipynb",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "cellIdsStable": true,
+      "fingerprint": {
+        "nbformat": "4.5",
+        "sourceHash": "sha256:ab12"
+      },
+      "cellAliases": {},
+      "extra": 1
+    }
+  },
+  {
+    "name": "notebook registration: alias value not a string",
+    "contract": "NotebookRegistration",
+    "value": {
+      "path": "analysis.ipynb",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "cellIdsStable": true,
+      "fingerprint": {
+        "nbformat": "4.5",
+        "sourceHash": "sha256:ab12"
+      },
+      "cellAliases": {
+        "tmp-1": 1
+      }
+    }
+  },
+  {
+    "name": "notebook status: missing cellRevisions",
+    "contract": "NotebookStatus",
+    "value": {
+      "apiVersion": 1,
+      "notebookId": "nb-1",
+      "explorationId": "nb-1",
+      "recording": true,
+      "active": true,
+      "needsRegister": false,
+      "needsResync": false,
+      "runsOpen": 0,
+      "openGaps": [],
+      "notices": []
+    }
+  },
+  {
+    "name": "notebook status: unknown reason",
+    "contract": "NotebookStatus",
+    "value": {
+      "apiVersion": 1,
+      "notebookId": "nb-1",
+      "explorationId": "nb-1",
+      "recording": true,
+      "active": true,
+      "needsRegister": false,
+      "needsResync": false,
+      "runsOpen": 0,
+      "openGaps": [],
+      "cellRevisions": {
+        "cell-1": 3
+      },
+      "notices": [],
+      "reason": "because"
+    }
+  },
+  {
+    "name": "notebook status: negative runsOpen",
+    "contract": "NotebookStatus",
+    "value": {
+      "apiVersion": 1,
+      "notebookId": "nb-1",
+      "explorationId": "nb-1",
+      "recording": true,
+      "active": true,
+      "needsRegister": false,
+      "needsResync": false,
+      "runsOpen": -1,
+      "openGaps": [],
+      "cellRevisions": {
+        "cell-1": 3
+      },
+      "notices": []
+    }
+  },
+  {
+    "name": "notebook status: open gap with unknown reason",
+    "contract": "NotebookStatus",
+    "value": {
+      "apiVersion": 1,
+      "notebookId": "nb-1",
+      "explorationId": "nb-1",
+      "recording": true,
+      "active": true,
+      "needsRegister": false,
+      "needsResync": false,
+      "runsOpen": 0,
+      "openGaps": [
+        {
+          "gapId": "g",
+          "source": "browser",
+          "reason": "nope"
+        }
+      ],
+      "cellRevisions": {
+        "cell-1": 3
+      },
+      "notices": []
+    }
+  },
+  {
+    "name": "notebook status: unknown notice code",
+    "contract": "NotebookStatus",
+    "value": {
+      "apiVersion": 1,
+      "notebookId": "nb-1",
+      "explorationId": "nb-1",
+      "recording": true,
+      "active": true,
+      "needsRegister": false,
+      "needsResync": false,
+      "runsOpen": 0,
+      "openGaps": [],
+      "cellRevisions": {
+        "cell-1": 3
+      },
+      "notices": [
+        {
+          "code": "teleported"
+        }
+      ]
+    }
+  },
+  {
+    "name": "notebook status: extra key",
+    "contract": "NotebookStatus",
+    "value": {
+      "apiVersion": 1,
+      "notebookId": "nb-1",
+      "explorationId": "nb-1",
+      "recording": true,
+      "active": true,
+      "needsRegister": false,
+      "needsResync": false,
+      "runsOpen": 0,
+      "openGaps": [],
+      "cellRevisions": {
+        "cell-1": 3
+      },
+      "notices": [],
+      "extra": 1
+    }
   }
 ]

@@ -871,6 +871,74 @@ I("service info: schemaVersion 3", "ServiceInfo", {**INFO, "schemaVersion": 3})
 I("service info: apiVersion as a string", "ServiceInfo", {**INFO, "apiVersion": "1"})
 I("ingest accepted: tick true", "IngestOutcome", {**ACCEPTED, "tick": True})
 
+# --- recording API (S5) ----------------------------------------------------------
+_item = CELL["outputs"][0]["items"][0]
+RCR_REQ = {"explorationId": "exploration-1", "cellId": "cell-1", "code": "x = 1"}
+PREP_REQ = {"explorationId": "exploration-1", "outputs": [{"output_type": "stream", "name": "stdout", "text": "hi\n"}]}
+PREP_RESP = {"apiVersion": 1, "items": [_item]}
+NB_REG = {"path": "analysis.ipynb", "editor": "jupyterlab", "instanceId": "tab-1", "cellIdsStable": True,
+          "fingerprint": {"nbformat": "4.5", "sourceHash": "sha256:ab12"}, "cellAliases": {}}
+NB_STATUS = {"apiVersion": 1, "notebookId": "nb-1", "explorationId": "nb-1", "recording": True, "active": True,
+             "needsRegister": False, "needsResync": False, "runsOpen": 0, "openGaps": [], "cellRevisions": {"cell-1": 3}, "notices": []}
+
+V("gap reason: switched_off", "BlaymEvent", {**EVENTS["recording_gap_started"], "payload": {**EVENTS["recording_gap_started"]["payload"], "reason": "switched_off"}})
+V("ingest refusal reason: run_in_progress", "IngestOutcome", {**REFUSED, "reason": "run_in_progress"})
+I("gap reason: unknown value", "BlaymEvent", {**EVENTS["recording_gap_started"], "payload": {**EVENTS["recording_gap_started"]["payload"], "reason": "switched-off"}})
+I("ingest refusal reason: unknown value", "IngestOutcome", {**REFUSED, "reason": "run_in_flight"})
+I("run output group: snapshot runId must be a string", "RunOutputs", {"runId": 5, "items": []})
+V("run output group: snapshot runId", "RunOutputs", {"runId": "snapshot:evt-1", "items": [_item]})
+
+V("resolve cell revision request", "ResolveCellRevisionRequest", RCR_REQ)
+V("resolve cell revision request with branch", "ResolveCellRevisionRequest", {**RCR_REQ, "branchId": "branch-main"})
+V("resolve cell revision request: empty code", "ResolveCellRevisionRequest", {**RCR_REQ, "code": ""})
+I("resolve cell revision request: missing code", "ResolveCellRevisionRequest", without(RCR_REQ, "code"))
+I("resolve cell revision request: extra key", "ResolveCellRevisionRequest", {**RCR_REQ, "extra": 1})
+I("resolve cell revision request: code null", "ResolveCellRevisionRequest", {**RCR_REQ, "code": None})
+V("resolve cell revision ok", "ResolveCellRevisionResponse", {"status": "ok", "cellRevision": 3})
+V("resolve cell revision unknown cell", "ResolveCellRevisionResponse", {"status": "unknown_cell"})
+V("resolve cell revision code differs", "ResolveCellRevisionResponse", {"status": "code_differs", "currentRevision": 5})
+V("resolve cell revision unknown history", "ResolveCellRevisionResponse", {"status": "unknown_history"})
+I("resolve cell revision response: ok with revision 0", "ResolveCellRevisionResponse", {"status": "ok", "cellRevision": 0})
+I("resolve cell revision response: code differs without current revision", "ResolveCellRevisionResponse", {"status": "code_differs"})
+I("resolve cell revision response: unknown status", "ResolveCellRevisionResponse", {"status": "maybe"})
+I("resolve cell revision response: ok with currentRevision", "ResolveCellRevisionResponse", {"status": "ok", "cellRevision": 3, "currentRevision": 3})
+I("resolve cell revision response: unknown cell with a revision", "ResolveCellRevisionResponse", {"status": "unknown_cell", "cellRevision": 3})
+
+V("prepare outputs request", "PrepareOutputsRequest", PREP_REQ)
+V("prepare outputs request: no outputs", "PrepareOutputsRequest", {**PREP_REQ, "outputs": []})
+V("prepare outputs request: 200 outputs (bound)", "PrepareOutputsRequest", {**PREP_REQ, "outputs": PREP_REQ["outputs"] * 200})
+I("prepare outputs request: 201 outputs", "PrepareOutputsRequest", {**PREP_REQ, "outputs": PREP_REQ["outputs"] * 201})
+I("prepare outputs request: an output is a string", "PrepareOutputsRequest", {**PREP_REQ, "outputs": ["stream"]})
+I("prepare outputs request: missing explorationId", "PrepareOutputsRequest", without(PREP_REQ, "explorationId"))
+V("prepare outputs response", "PrepareOutputsResponse", PREP_RESP)
+V("prepare outputs response: no items", "PrepareOutputsResponse", {**PREP_RESP, "items": []})
+V("prepare outputs response: two items", "PrepareOutputsResponse", {**PREP_RESP, "items": [_item, _item]})
+I("prepare outputs response: missing apiVersion", "PrepareOutputsResponse", without(PREP_RESP, "apiVersion"))
+I("prepare outputs response: an item without contentHash", "PrepareOutputsResponse", {**PREP_RESP, "items": [without(_item, "contentHash")]})
+I("prepare outputs response: items not a list", "PrepareOutputsResponse", {**PREP_RESP, "items": _item})
+
+V("notebook registration", "NotebookRegistration", NB_REG)
+V("notebook registration: old notebook with aliases", "NotebookRegistration", {**NB_REG, "cellIdsStable": False, "cellAliases": {"tmp-1": "cell-1"}, "fingerprint": {"nbformat": "4.4", "sourceHash": "sha256:cd34"}})
+V("notebook registration: all options", "NotebookRegistration", {**NB_REG, "setRecording": True, "collaboration": False, "takeover": True,
+  "fingerprint": {"nbformat": "4.5", "cellIds": ["cell-1", "cell-2"], "sourceHash": "sha256:ab12"}})
+I("notebook registration: missing fingerprint", "NotebookRegistration", without(NB_REG, "fingerprint"))
+I("notebook registration: missing cellAliases", "NotebookRegistration", without(NB_REG, "cellAliases"))
+I("notebook registration: unknown editor", "NotebookRegistration", {**NB_REG, "editor": "emacs"})
+I("notebook registration: fingerprint without sourceHash", "NotebookRegistration", {**NB_REG, "fingerprint": {"nbformat": "4.5"}})
+I("notebook registration: extra key", "NotebookRegistration", {**NB_REG, "extra": 1})
+I("notebook registration: alias value not a string", "NotebookRegistration", {**NB_REG, "cellAliases": {"tmp-1": 1}})
+
+V("notebook status", "NotebookStatus", NB_STATUS)
+V("notebook status: other recorder active", "NotebookStatus", {**NB_STATUS, "active": False, "holderInstanceId": "tab-2", "reason": "other_recorder_active"})
+V("notebook status: open gaps, notices and resync", "NotebookStatus", {**NB_STATUS, "needsResync": True, "runsOpen": 2,
+  "openGaps": [{"gapId": "gap-1", "source": "browser", "reason": "switched_off"}], "notices": [{"code": "moved"}, {"code": "copied"}]})
+I("notebook status: missing cellRevisions", "NotebookStatus", without(NB_STATUS, "cellRevisions"))
+I("notebook status: unknown reason", "NotebookStatus", {**NB_STATUS, "reason": "because"})
+I("notebook status: negative runsOpen", "NotebookStatus", {**NB_STATUS, "runsOpen": -1})
+I("notebook status: open gap with unknown reason", "NotebookStatus", {**NB_STATUS, "openGaps": [{"gapId": "g", "source": "browser", "reason": "nope"}]})
+I("notebook status: unknown notice code", "NotebookStatus", {**NB_STATUS, "notices": [{"code": "teleported"}]})
+I("notebook status: extra key", "NotebookStatus", {**NB_STATUS, "extra": 1})
+
 names = [c["name"] for c in invalid]
 assert len(names) == len(set(names)), [n for n in names if names.count(n) > 1]
 

@@ -46,12 +46,16 @@ export interface EventLinks {
 /** Which recorder could not see something (ADR 0005). */
 export type GapSource = 'browser' | 'kernel' | 'chat' | 'files' | 'service';
 
-/** Why a recorder could not see (ADR 0005). */
+/**
+ * Why a recorder could not see (ADR 0005). `switched_off`: the user turned
+ * recording off for the notebook (an edge, not an outage).
+ */
 export type GapReason =
   | 'no_client'
   | 'kernel_restart'
   | 'server_unavailable'
   | 'source_closed'
+  | 'switched_off'
   | 'unknown';
 
 /**
@@ -104,6 +108,9 @@ export interface RunOutputs {
   /**
    * For outputs that arrived with an inserted cell and no run, `pasted:<eventId>`
    * (the `cell_inserted` event's id), made by the rebuilder, never by a recorder.
+   * For outputs that arrived in a `notebook_snapshot` (the editor's statement of
+   * the whole notebook), `snapshot:<eventId>` (the snapshot event's id), made
+   * by the recorder.
    */
   runId: string;
   items: OutputItem[];
@@ -1005,7 +1012,10 @@ export interface HistoryAdvanced {
 /** The version of the service API itself (separate from `schemaVersion`). */
 export type ApiVersion = 1;
 
-/** Why the service refused one event. */
+/**
+ * Why the service refused one event. `run_in_progress`: a snapshot (not the
+ * first) or an outside change arrived while a run on the branch is running.
+ */
 export type IngestRefusalReason =
   | 'unauthorized'
   | 'unsupported_schema_version'
@@ -1014,7 +1024,8 @@ export type IngestRefusalReason =
   | 'invalid_event'
   | 'conflict'
   | 'missing_blob'
-  | 'bad_first_event';
+  | 'bad_first_event'
+  | 'run_in_progress';
 
 /**
  * Events from a recorder. They go to the active branch unless
@@ -1342,4 +1353,170 @@ export interface OutlineRequest {
 export interface GetBlobRequest {
   explorationId: string;
   contentHash: string;
+}
+
+// ---------------------------------------------------------------------------
+// Recording API (S5): cell revision lookup, output preparation and the
+// notebook registry. Plain data only, like the S4 API above.
+// ---------------------------------------------------------------------------
+
+/**
+ * Ask which revision of a cell holds this code (a run's code is matched to the
+ * stored, secret-hidden revisions). `branchId` defaults to the active branch.
+ * @additionalProperties false
+ */
+export interface ResolveCellRevisionRequest {
+  explorationId: string;
+  cellId: string;
+  code: string;
+  branchId?: string;
+}
+
+/** @additionalProperties false */
+export interface ResolveCellRevisionOk {
+  status: 'ok';
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  cellRevision: number;
+}
+
+/** @additionalProperties false */
+export interface ResolveCellRevisionUnknownCell {
+  status: 'unknown_cell';
+}
+
+/** @additionalProperties false */
+export interface ResolveCellRevisionCodeDiffers {
+  status: 'code_differs';
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  currentRevision: number;
+}
+
+/** @additionalProperties false */
+export interface ResolveCellRevisionUnknownHistory {
+  status: 'unknown_history';
+}
+
+export type ResolveCellRevisionResponse =
+  | ResolveCellRevisionOk
+  | ResolveCellRevisionUnknownCell
+  | ResolveCellRevisionCodeDiffers
+  | ResolveCellRevisionUnknownHistory;
+
+/**
+ * Raw nbformat output objects (from a snapshot or a paste) to be turned into
+ * output items by the service's one output builder.
+ * @additionalProperties false
+ */
+export interface PrepareOutputsRequest {
+  explorationId: string;
+  /**
+   * Raw nbformat output objects.
+   * @maxItems 200
+   */
+  outputs: Record<string, unknown>[];
+}
+
+/**
+ * One item per requested output, in the same order.
+ * @additionalProperties false
+ */
+export interface PrepareOutputsResponse {
+  apiVersion: ApiVersion;
+  items: OutputItem[];
+}
+
+/**
+ * What a recorder knows of a notebook's content, to tell a move or a copy from
+ * a new notebook.
+ * @additionalProperties false
+ */
+export interface NotebookFingerprint {
+  /** nbformat version as `major.minor`, for example `4.5`. */
+  nbformat: string;
+  /** The notebook's own cell ids, when it has stable ones (nbformat 4.5 or newer). */
+  cellIds?: string[];
+  /** Hash of all cell sources. */
+  sourceHash: string;
+}
+
+/**
+ * A recorder instance announces itself for a notebook (a path). Idempotent.
+ * @additionalProperties false
+ */
+export interface NotebookRegistration {
+  path: string;
+  editor: Editor;
+  /** One recorder instance (for example one browser tab). */
+  instanceId: string;
+  /** Switch recording on or off for this notebook; absent leaves it as it is. */
+  setRecording?: boolean;
+  /** True when the editor's cell ids are the notebook's own stable ids. */
+  cellIdsStable: boolean;
+  fingerprint: NotebookFingerprint;
+  /** The editor's temporary cell id to Blaym's cell id, where they differ. */
+  cellAliases: Record<string, string>;
+  /** True when the editor reports collaboration mode (not supported yet). */
+  collaboration?: boolean;
+  /** Ask to become the active recorder even if another instance holds it. */
+  takeover?: boolean;
+}
+
+/** Why an instance is not the active recorder. */
+export type NotebookStatusReason =
+  | 'other_recorder_active'
+  | 'collaboration_not_supported';
+
+/**
+ * A gap still open, for the recorder that opened it to close.
+ * @additionalProperties false
+ */
+export interface OpenGap {
+  gapId: string;
+  source: GapSource;
+  reason: GapReason;
+}
+
+/** A quiet notice about how the notebook was identified. */
+export type NotebookNoticeCode = 'moved' | 'copied';
+
+/** @additionalProperties false */
+export interface NotebookNotice {
+  code: NotebookNoticeCode;
+}
+
+/**
+ * The answer to a registration and to the heartbeat.
+ * @additionalProperties false
+ */
+export interface NotebookStatus {
+  apiVersion: ApiVersion;
+  /** Blaym's id of the notebook; also the history's `explorationId`. */
+  notebookId: string;
+  explorationId: string;
+  /** Whether recording is on for this notebook. */
+  recording: boolean;
+  /** Whether the asking instance is the active recorder. */
+  active: boolean;
+  holderInstanceId?: string;
+  reason?: NotebookStatusReason;
+  /** The server restarted: register again (and resend the aliases). */
+  needsRegister: boolean;
+  /** The recorder should send a fresh `notebook_snapshot`. */
+  needsResync: boolean;
+  /**
+   * Runs of this notebook still running.
+   * @asType integer
+   * @minimum 0
+   */
+  runsOpen: number;
+  openGaps: OpenGap[];
+  /** The tip revision of every cell (never goes down). */
+  cellRevisions: Record<string, number>;
+  notices: NotebookNotice[];
 }

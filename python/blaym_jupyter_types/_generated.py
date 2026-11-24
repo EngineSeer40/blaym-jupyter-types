@@ -14,6 +14,7 @@ from pydantic import (
     Field,
     RootModel,
     StrictBool,
+    StrictFloat,
     StrictInt,
     StrictStr,
 )
@@ -199,6 +200,7 @@ class GapReason(StrEnum):
     kernel_restart = 'kernel_restart'
     server_unavailable = 'server_unavailable'
     source_closed = 'source_closed'
+    switched_off = 'switched_off'
     unknown = 'unknown'
 
 
@@ -251,6 +253,7 @@ class IngestRefusalReason(StrEnum):
     conflict = 'conflict'
     missing_blob = 'missing_blob'
     bad_first_event = 'bad_first_event'
+    run_in_progress = 'run_in_progress'
 
 
 class InvalidEventReason(StrEnum):
@@ -294,6 +297,23 @@ class NotebookCopiedPayload(BaseModel):
     oldPath: StrictStr
 
 
+class NotebookFingerprint(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    cellIds: Annotated[
+        list[StrictStr] | None,
+        Field(
+            description="The notebook's own cell ids, when it has stable ones (nbformat 4.5 or newer)."
+        ),
+    ] = None
+    nbformat: Annotated[
+        StrictStr,
+        Field(description='nbformat version as `major.minor`, for example `4.5`.'),
+    ]
+    sourceHash: Annotated[StrictStr, Field(description='Hash of all cell sources.')]
+
+
 class NotebookMetadataChangedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -304,12 +324,74 @@ class NotebookMetadataChangedPayload(BaseModel):
     ]
 
 
+class NotebookNoticeCode(StrEnum):
+    moved = 'moved'
+    copied = 'copied'
+
+
+class NotebookRegistration(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    cellAliases: Annotated[
+        dict[str, StrictStr],
+        Field(
+            description="The editor's temporary cell id to Blaym's cell id, where they differ."
+        ),
+    ]
+    cellIdsStable: Annotated[
+        StrictBool,
+        Field(
+            description="True when the editor's cell ids are the notebook's own stable ids."
+        ),
+    ]
+    collaboration: Annotated[
+        StrictBool | None,
+        Field(
+            description='True when the editor reports collaboration mode (not supported yet).'
+        ),
+    ] = None
+    editor: Editor
+    fingerprint: NotebookFingerprint
+    instanceId: Annotated[
+        StrictStr,
+        Field(description='One recorder instance (for example one browser tab).'),
+    ]
+    path: StrictStr
+    setRecording: Annotated[
+        StrictBool | None,
+        Field(
+            description='Switch recording on or off for this notebook; absent leaves it as it is.'
+        ),
+    ] = None
+    takeover: Annotated[
+        StrictBool | None,
+        Field(
+            description='Ask to become the active recorder even if another instance holds it.'
+        ),
+    ] = None
+
+
 class NotebookRenamedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     newPath: StrictStr
     oldPath: StrictStr
+
+
+class NotebookStatusReason(StrEnum):
+    other_recorder_active = 'other_recorder_active'
+    collaboration_not_supported = 'collaboration_not_supported'
+
+
+class OpenGap(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    gapId: StrictStr
+    reason: GapReason
+    source: GapSource
 
 
 class OutlineRequest(BaseModel):
@@ -360,6 +442,17 @@ class OutsideChangeMarker(BaseModel):
         extra='forbid',
     )
     tick: Annotated[StrictInt, Field(ge=1)]
+
+
+class PrepareOutputsRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    explorationId: StrictStr
+    outputs: Annotated[
+        list[dict[str, Any]],
+        Field(description='Raw nbformat output objects.', max_length=200),
+    ]
 
 
 class PutBlobResponse(BaseModel):
@@ -829,6 +922,46 @@ class RecordingGapStartedPayload(BaseModel):
     gapId: StrictStr
     reason: GapReason
     source: GapSource
+
+
+class ResolveCellRevisionCodeDiffers(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    currentRevision: Annotated[StrictInt, Field(ge=1)]
+    status: Literal['code_differs']
+
+
+class ResolveCellRevisionOk(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    cellRevision: Annotated[StrictInt, Field(ge=1)]
+    status: Literal['ok']
+
+
+class ResolveCellRevisionRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr | None = None
+    cellId: StrictStr
+    code: StrictStr
+    explorationId: StrictStr
+
+
+class ResolveCellRevisionUnknownCell(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    status: Literal['unknown_cell']
+
+
+class ResolveCellRevisionUnknownHistory(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    status: Literal['unknown_history']
 
 
 class RestartReason(StrEnum):
@@ -1625,6 +1758,13 @@ class NotebookMetadataChanged(BaseModel):
     ]
 
 
+class NotebookNotice(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    code: NotebookNoticeCode
+
+
 class NotebookRenamed(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1664,6 +1804,48 @@ class NotebookRenamed(BaseModel):
     ]
     workspaceId: Annotated[
         StrictStr, Field(description='"local" in the first version.')
+    ]
+
+
+class NotebookStatus(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    active: Annotated[
+        StrictBool,
+        Field(description='Whether the asking instance is the active recorder.'),
+    ]
+    apiVersion: ApiVersion
+    cellRevisions: Annotated[
+        dict[str, StrictFloat],
+        Field(description='The tip revision of every cell (never goes down).'),
+    ]
+    explorationId: StrictStr
+    holderInstanceId: StrictStr | None = None
+    needsRegister: Annotated[
+        StrictBool,
+        Field(
+            description='The server restarted: register again (and resend the aliases).'
+        ),
+    ]
+    needsResync: Annotated[
+        StrictBool,
+        Field(description='The recorder should send a fresh `notebook_snapshot`.'),
+    ]
+    notebookId: Annotated[
+        StrictStr,
+        Field(
+            description="Blaym's id of the notebook; also the history's `explorationId`."
+        ),
+    ]
+    notices: list[NotebookNotice]
+    openGaps: list[OpenGap]
+    reason: NotebookStatusReason | None = None
+    recording: Annotated[
+        StrictBool, Field(description='Whether recording is on for this notebook.')
+    ]
+    runsOpen: Annotated[
+        StrictInt, Field(description='Runs of this notebook still running.', ge=0)
     ]
 
 
@@ -1770,6 +1952,14 @@ class OutputsCleared(BaseModel):
     workspaceId: Annotated[
         StrictStr, Field(description='"local" in the first version.')
     ]
+
+
+class PrepareOutputsResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    items: list[OutputItem]
 
 
 class RecorderEvent9(BaseModel):
@@ -2080,6 +2270,22 @@ class RecordingGapStarted(BaseModel):
     ]
 
 
+class ResolveCellRevisionResponse(
+    RootModel[
+        ResolveCellRevisionOk
+        | ResolveCellRevisionUnknownCell
+        | ResolveCellRevisionCodeDiffers
+        | ResolveCellRevisionUnknownHistory
+    ]
+):
+    root: (
+        ResolveCellRevisionOk
+        | ResolveCellRevisionUnknownCell
+        | ResolveCellRevisionCodeDiffers
+        | ResolveCellRevisionUnknownHistory
+    )
+
+
 class RunFinished(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2136,7 +2342,7 @@ class RunOutputs(BaseModel):
     runId: Annotated[
         StrictStr,
         Field(
-            description="For outputs that arrived with an inserted cell and no run, `pasted:<eventId>` (the `cell_inserted` event's id), made by the rebuilder, never by a recorder."
+            description="For outputs that arrived with an inserted cell and no run, `pasted:<eventId>` (the `cell_inserted` event's id), made by the rebuilder, never by a recorder. For outputs that arrived in a `notebook_snapshot` (the editor's statement of the whole notebook), `snapshot:<eventId>` (the snapshot event's id), made by the recorder."
         ),
     ]
 

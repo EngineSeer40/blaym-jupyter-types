@@ -1513,12 +1513,13 @@
       "type": "object"
     },
     "GapReason": {
-      "description": "Why a recorder could not see (ADR 0005).",
+      "description": "Why a recorder could not see (ADR 0005). `switched_off`: the user turned recording off for the notebook (an edge, not an outage).",
       "enum": [
         "no_client",
         "kernel_restart",
         "server_unavailable",
         "source_closed",
+        "switched_off",
         "unknown"
       ],
       "type": "string"
@@ -1697,7 +1698,7 @@
       ]
     },
     "IngestRefusalReason": {
-      "description": "Why the service refused one event.",
+      "description": "Why the service refused one event. `run_in_progress`: a snapshot (not the first) or an outside change arrived while a run on the branch is running.",
       "enum": [
         "unauthorized",
         "unsupported_schema_version",
@@ -1706,7 +1707,8 @@
         "invalid_event",
         "conflict",
         "missing_blob",
-        "bad_first_event"
+        "bad_first_event",
+        "run_in_progress"
       ],
       "type": "string"
     },
@@ -2193,6 +2195,32 @@
       ],
       "type": "object"
     },
+    "NotebookFingerprint": {
+      "additionalProperties": false,
+      "description": "What a recorder knows of a notebook's content, to tell a move or a copy from a new notebook.",
+      "properties": {
+        "cellIds": {
+          "description": "The notebook's own cell ids, when it has stable ones (nbformat 4.5 or newer).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "nbformat": {
+          "description": "nbformat version as `major.minor`, for example `4.5`.",
+          "type": "string"
+        },
+        "sourceHash": {
+          "description": "Hash of all cell sources.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "nbformat",
+        "sourceHash"
+      ],
+      "type": "object"
+    },
     "NotebookMetadataChanged": {
       "additionalProperties": false,
       "properties": {
@@ -2280,6 +2308,77 @@
       },
       "required": [
         "metadata"
+      ],
+      "type": "object"
+    },
+    "NotebookNotice": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/NotebookNoticeCode"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    },
+    "NotebookNoticeCode": {
+      "description": "A quiet notice about how the notebook was identified.",
+      "enum": [
+        "moved",
+        "copied"
+      ],
+      "type": "string"
+    },
+    "NotebookRegistration": {
+      "additionalProperties": false,
+      "description": "A recorder instance announces itself for a notebook (a path). Idempotent.",
+      "properties": {
+        "cellAliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The editor's temporary cell id to Blaym's cell id, where they differ.",
+          "type": "object"
+        },
+        "cellIdsStable": {
+          "description": "True when the editor's cell ids are the notebook's own stable ids.",
+          "type": "boolean"
+        },
+        "collaboration": {
+          "description": "True when the editor reports collaboration mode (not supported yet).",
+          "type": "boolean"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "fingerprint": {
+          "$ref": "#/definitions/NotebookFingerprint"
+        },
+        "instanceId": {
+          "description": "One recorder instance (for example one browser tab).",
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "setRecording": {
+          "description": "Switch recording on or off for this notebook; absent leaves it as it is.",
+          "type": "boolean"
+        },
+        "takeover": {
+          "description": "Ask to become the active recorder even if another instance holds it.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path",
+        "editor",
+        "instanceId",
+        "cellIdsStable",
+        "fingerprint",
+        "cellAliases"
       ],
       "type": "object"
     },
@@ -2505,6 +2604,111 @@
         "path",
         "metadata",
         "cells"
+      ],
+      "type": "object"
+    },
+    "NotebookStatus": {
+      "additionalProperties": false,
+      "description": "The answer to a registration and to the heartbeat.",
+      "properties": {
+        "active": {
+          "description": "Whether the asking instance is the active recorder.",
+          "type": "boolean"
+        },
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "cellRevisions": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "The tip revision of every cell (never goes down).",
+          "type": "object"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "holderInstanceId": {
+          "type": "string"
+        },
+        "needsRegister": {
+          "description": "The server restarted: register again (and resend the aliases).",
+          "type": "boolean"
+        },
+        "needsResync": {
+          "description": "The recorder should send a fresh `notebook_snapshot`.",
+          "type": "boolean"
+        },
+        "notebookId": {
+          "description": "Blaym's id of the notebook; also the history's `explorationId`.",
+          "type": "string"
+        },
+        "notices": {
+          "items": {
+            "$ref": "#/definitions/NotebookNotice"
+          },
+          "type": "array"
+        },
+        "openGaps": {
+          "items": {
+            "$ref": "#/definitions/OpenGap"
+          },
+          "type": "array"
+        },
+        "reason": {
+          "$ref": "#/definitions/NotebookStatusReason"
+        },
+        "recording": {
+          "description": "Whether recording is on for this notebook.",
+          "type": "boolean"
+        },
+        "runsOpen": {
+          "description": "Runs of this notebook still running.",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "notebookId",
+        "explorationId",
+        "recording",
+        "active",
+        "needsRegister",
+        "needsResync",
+        "runsOpen",
+        "openGaps",
+        "cellRevisions",
+        "notices"
+      ],
+      "type": "object"
+    },
+    "NotebookStatusReason": {
+      "description": "Why an instance is not the active recorder.",
+      "enum": [
+        "other_recorder_active",
+        "collaboration_not_supported"
+      ],
+      "type": "string"
+    },
+    "OpenGap": {
+      "additionalProperties": false,
+      "description": "A gap still open, for the recorder that opened it to close.",
+      "properties": {
+        "gapId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/GapReason"
+        },
+        "source": {
+          "$ref": "#/definitions/GapSource"
+        }
+      },
+      "required": [
+        "gapId",
+        "source",
+        "reason"
       ],
       "type": "object"
     },
@@ -2947,6 +3151,49 @@
       },
       "required": [
         "tick"
+      ],
+      "type": "object"
+    },
+    "PrepareOutputsRequest": {
+      "additionalProperties": false,
+      "description": "Raw nbformat output objects (from a snapshot or a paste) to be turned into output items by the service's one output builder.",
+      "properties": {
+        "explorationId": {
+          "type": "string"
+        },
+        "outputs": {
+          "description": "Raw nbformat output objects.",
+          "items": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "maxItems": 200,
+          "type": "array"
+        }
+      },
+      "required": [
+        "explorationId",
+        "outputs"
+      ],
+      "type": "object"
+    },
+    "PrepareOutputsResponse": {
+      "additionalProperties": false,
+      "description": "One item per requested output, in the same order.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/OutputItem"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "items"
       ],
       "type": "object"
     },
@@ -4954,6 +5201,108 @@
       ],
       "type": "object"
     },
+    "ResolveCellRevisionCodeDiffers": {
+      "additionalProperties": false,
+      "properties": {
+        "currentRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "status": {
+          "const": "code_differs",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "currentRevision"
+      ],
+      "type": "object"
+    },
+    "ResolveCellRevisionOk": {
+      "additionalProperties": false,
+      "properties": {
+        "cellRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "status": {
+          "const": "ok",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "cellRevision"
+      ],
+      "type": "object"
+    },
+    "ResolveCellRevisionRequest": {
+      "additionalProperties": false,
+      "description": "Ask which revision of a cell holds this code (a run's code is matched to the stored, secret-hidden revisions). `branchId` defaults to the active branch.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "cellId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "cellId",
+        "code"
+      ],
+      "type": "object"
+    },
+    "ResolveCellRevisionResponse": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ResolveCellRevisionOk"
+        },
+        {
+          "$ref": "#/definitions/ResolveCellRevisionUnknownCell"
+        },
+        {
+          "$ref": "#/definitions/ResolveCellRevisionCodeDiffers"
+        },
+        {
+          "$ref": "#/definitions/ResolveCellRevisionUnknownHistory"
+        }
+      ]
+    },
+    "ResolveCellRevisionUnknownCell": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "unknown_cell",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
+    "ResolveCellRevisionUnknownHistory": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "unknown_history",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
     "RestartReason": {
       "description": "`crash` only where the editor reports it; in Jupyter a crash looks like a restart and stays `unknown`.",
       "enum": [
@@ -5078,7 +5427,7 @@
           "type": "array"
         },
         "runId": {
-          "description": "For outputs that arrived with an inserted cell and no run, `pasted:<eventId>` (the `cell_inserted` event's id), made by the rebuilder, never by a recorder.",
+          "description": "For outputs that arrived with an inserted cell and no run, `pasted:<eventId>` (the `cell_inserted` event's id), made by the rebuilder, never by a recorder. For outputs that arrived in a `notebook_snapshot` (the editor's statement of the whole notebook), `snapshot:<eventId>` (the snapshot event's id), made by the recorder.",
           "type": "string"
         }
       },
