@@ -651,6 +651,226 @@ invalid.append({"name": "recorder event: carries a branchId", "contract": "Recor
 invalid.append({"name": "recorder event: missing eventId", "contract": "RecorderEvent", "value": {k: x for k, x in _rec.items() if k != "eventId"}})
 invalid.append({"name": "recorder event: type and payload of different events", "contract": "RecorderEvent", "value": {**_rec, "payload": {"kernelId": "kernel-1", "reason": "crash"}}})
 invalid.append({"name": "event cell_inserted: outputs not a list", "contract": "BlaymEvent", "value": {**EVENTS["cell_inserted"], "payload": {**EVENTS["cell_inserted"]["payload"], "outputs": "x"}}})
+# --- service API ---------------------------------------------------------------
+_rec_ok = {k: x for k, x in EVENTS["cell_deleted"].items() if k not in ("tick", "branchId")}
+_rec_snap = {k: x for k, x in EVENTS["notebook_snapshot"].items() if k not in ("tick", "branchId")}
+_inv_result = RESULTS["invalid_event"]
+INGEST_REQ = {"explorationId": "exploration-1", "editor": "jupyterlab", "instanceId": "tab-1", "events": [_rec_snap, _rec_ok]}
+ACCEPTED = {"status": "accepted", "eventId": _rec_ok["eventId"], "branchId": "branch-main", "tick": 3, "duplicate": False}
+REFUSED = {"status": "refused", "eventId": _rec_ok["eventId"], "reason": "not_active_recorder", "detail": "Another editor is recording this notebook."}
+REFUSED_INVALID = {**REFUSED, "reason": "invalid_event", "detail": "The run is not running.", "rebuild": _inv_result}
+INGEST_RESP = {"apiVersion": 1, "outcomes": [ACCEPTED, {**ACCEPTED, "tick": 3, "duplicate": True}, REFUSED]}
+BRANCH_REQ = {"explorationId": "exploration-1", "fromBranchId": "branch-main", "fromTick": 4, "name": "try again"}
+BRANCH_OK = {"status": "ok", "branch": OUTLINE["branches"][1]}
+BRANCH_REFUSED = {"status": "refused", "reason": "unsettled_moment", "detail": "A cell was still running at that moment."}
+ACTIVE_REQ = {"explorationId": "exploration-1", "branchId": "branch-b"}
+ACTIVE_OK = {"status": "ok", "branchId": "branch-b"}
+ACTIVE_REFUSED = {"status": "refused", "reason": "unknown_branch", "detail": "No such branch."}
+CLAIM_REQ = {"explorationId": "exploration-1", "editor": "jupyterlab", "instanceId": "tab-1"}
+CLAIM_GRANTED = {"status": "granted"}
+CLAIM_REFUSED = {"status": "refused", "holderEditor": "vscode", "detail": "VS Code is recording this notebook."}
+PUT_BLOB = {"contentHash": "sha256:ab12", "storedBytes": 120, "originalBytes": 400, "truncated": False}
+SINCE_REQ = {"explorationId": "exploration-1", "branchId": "branch-main", "afterTick": 0}
+SINCE_RESP = {"apiVersion": 1, "events": [EVENTS["notebook_snapshot"], EVENTS["cell_inserted"]], "outline": OUTLINE}
+SEARCH_REQ = {"explorationId": "exploration-1", "query": "residuals"}
+SEARCH_HIT = {"branchId": "branch-main", "tick": 5, "kind": "code", "snippet": "plot(residuals)"}
+SEARCH_RESP = {"apiVersion": 1, "hits": [SEARCH_HIT]}
+LIMITS = {"snapshotInterval": 200, "inlineOutputBytes": 16384, "maxStoredOutputBytes": 10485760,
+          "truncatedPreviewBytes": 262144, "indexedTextBytesPerItem": 65536, "chatMessageMaxBytes": 1048576, "blobGzipLevel": 6}
+INFO = {"apiVersion": 1, "schemaVersion": 2}
+
+
+def V(name, contract, value):
+    valid.append({"name": name, "contract": contract, "value": value})
+
+
+def I(name, contract, value):
+    invalid.append({"name": name, "contract": contract, "value": value})
+
+
+def without(d, k):
+    return {x: v for x, v in d.items() if x != k}
+
+
+V("ingest request", "IngestRequest", INGEST_REQ)
+V("ingest request with target branch", "IngestRequest", {**INGEST_REQ, "targetBranchId": "branch-b"})
+V("ingest request with no events", "IngestRequest", {**INGEST_REQ, "events": []})
+V("ingest accepted", "IngestOutcome", ACCEPTED)
+V("ingest accepted duplicate", "IngestOutcome", {**ACCEPTED, "duplicate": True})
+V("ingest refused", "IngestOutcome", REFUSED)
+V("ingest refused invalid event with rebuild", "IngestOutcome", REFUSED_INVALID)
+for r in ("unauthorized", "unsupported_schema_version", "unknown_branch", "not_active_recorder", "invalid_event", "conflict", "missing_blob", "bad_first_event"):
+    V(f"ingest refusal reason: {r}", "IngestOutcome", {**REFUSED, "reason": r})
+V("ingest response", "IngestResponse", INGEST_RESP)
+V("create branch request", "CreateBranchRequest", BRANCH_REQ)
+V("create branch ok", "CreateBranchResponse", BRANCH_OK)
+for r in ("unknown_moment", "moment_not_rebuildable", "unsettled_moment", "not_on_line", "unauthorized"):
+    V(f"create branch refused: {r}", "CreateBranchResponse", {**BRANCH_REFUSED, "reason": r})
+V("set active branch request", "SetActiveBranchRequest", ACTIVE_REQ)
+V("set active branch ok", "SetActiveBranchResponse", ACTIVE_OK)
+V("set active branch refused", "SetActiveBranchResponse", ACTIVE_REFUSED)
+V("set active branch refused unauthorized", "SetActiveBranchResponse", {**ACTIVE_REFUSED, "reason": "unauthorized"})
+V("claim recorder request", "ClaimRecorderRequest", CLAIM_REQ)
+V("claim recorder granted", "ClaimRecorderResponse", CLAIM_GRANTED)
+V("claim recorder refused", "ClaimRecorderResponse", CLAIM_REFUSED)
+V("put blob response", "PutBlobResponse", PUT_BLOB)
+V("put blob response truncated", "PutBlobResponse", {**PUT_BLOB, "truncated": True, "originalBytes": 0, "storedBytes": 0})
+V("events since request", "EventsSinceRequest", SINCE_REQ)
+V("events since response", "EventsSinceResponse", SINCE_RESP)
+V("events since response with no events", "EventsSinceResponse", {**SINCE_RESP, "events": []})
+V("search request", "SearchRequest", SEARCH_REQ)
+V("search request with kinds and limit", "SearchRequest", {**SEARCH_REQ, "kinds": ["code", "chat", "output_text", "table_columns", "chart_text"], "limit": 20})
+V("search hit", "SearchHit", SEARCH_HIT)
+for k in ("chat", "output_text", "table_columns", "chart_text"):
+    V(f"search hit kind: {k}", "SearchHit", {**SEARCH_HIT, "kind": k})
+V("search response", "SearchResponse", SEARCH_RESP)
+V("store limits", "StoreLimits", LIMITS)
+V("store limits empty", "StoreLimits", {})
+V("store limits partial", "StoreLimits", {"snapshotInterval": 50})
+V("service info", "ServiceInfo", INFO)
+STATE_REQ = {"explorationId": "exploration-1", "branchId": "branch-main", "tick": 4}
+OUTLINE_REQ = {"explorationId": "exploration-1"}
+BLOB_REQ = {"explorationId": "exploration-1", "contentHash": "sha256:ab12"}
+V("state at request", "StateAtRequest", STATE_REQ)
+V("outline request", "OutlineRequest", OUTLINE_REQ)
+V("get blob request", "GetBlobRequest", BLOB_REQ)
+
+# every required field missing
+for name, contract, base in (
+    ("ingest request", "IngestRequest", INGEST_REQ),
+    ("ingest accepted", "IngestOutcome", ACCEPTED),
+    ("ingest refused", "IngestOutcome", REFUSED),
+    ("ingest response", "IngestResponse", INGEST_RESP),
+    ("create branch request", "CreateBranchRequest", BRANCH_REQ),
+    ("create branch ok", "CreateBranchResponse", BRANCH_OK),
+    ("create branch refused", "CreateBranchResponse", BRANCH_REFUSED),
+    ("set active branch request", "SetActiveBranchRequest", ACTIVE_REQ),
+    ("set active branch ok", "SetActiveBranchResponse", ACTIVE_OK),
+    ("set active branch refused", "SetActiveBranchResponse", ACTIVE_REFUSED),
+    ("claim recorder request", "ClaimRecorderRequest", CLAIM_REQ),
+    ("claim recorder granted", "ClaimRecorderResponse", CLAIM_GRANTED),
+    ("claim recorder refused", "ClaimRecorderResponse", CLAIM_REFUSED),
+    ("put blob response", "PutBlobResponse", PUT_BLOB),
+    ("events since request", "EventsSinceRequest", SINCE_REQ),
+    ("events since response", "EventsSinceResponse", SINCE_RESP),
+    ("search request", "SearchRequest", SEARCH_REQ),
+    ("search hit", "SearchHit", SEARCH_HIT),
+    ("search response", "SearchResponse", SEARCH_RESP),
+    ("service info", "ServiceInfo", INFO),
+    ("state at request", "StateAtRequest", STATE_REQ),
+    ("outline request", "OutlineRequest", OUTLINE_REQ),
+    ("get blob request", "GetBlobRequest", BLOB_REQ),
+):
+    for k in base:
+        I(f"{name}: missing {k}", contract, without(base, k))
+    I(f"{name}: extra key", contract, {**base, "extra": 1})
+
+I("ingest request: recorder event carries a tick", "IngestRequest", {**INGEST_REQ, "events": [{**_rec_ok, "tick": 3}]})
+I("ingest request: events not a list", "IngestRequest", {**INGEST_REQ, "events": _rec_ok})
+I("ingest request: target branch not a string", "IngestRequest", {**INGEST_REQ, "targetBranchId": 1})
+I("ingest outcome: unknown status", "IngestOutcome", {**ACCEPTED, "status": "maybe"})
+I("ingest accepted: duplicate not a boolean", "IngestOutcome", {**ACCEPTED, "duplicate": "no"})
+I("ingest accepted: refused fields mixed in", "IngestOutcome", {**ACCEPTED, "reason": "conflict"})
+I("ingest refused: unknown reason", "IngestOutcome", {**REFUSED, "reason": "because"})
+I("ingest refused: rebuild is not a rebuild result", "IngestOutcome", {**REFUSED, "rebuild": {"status": "fine"}})
+I("ingest response: apiVersion 2", "IngestResponse", {**INGEST_RESP, "apiVersion": 2})
+I("ingest response: outcomes not a list", "IngestResponse", {**INGEST_RESP, "outcomes": ACCEPTED})
+I("create branch refused: unknown reason", "CreateBranchResponse", {**BRANCH_REFUSED, "reason": "no"})
+I("create branch ok: branch is not an outline branch", "CreateBranchResponse", {**BRANCH_OK, "branch": {"branchId": "x"}})
+I("create branch response: unknown status", "CreateBranchResponse", {**BRANCH_REFUSED, "status": "later"})
+I("set active branch refused: unknown reason", "SetActiveBranchResponse", {**ACTIVE_REFUSED, "reason": "no"})
+I("claim recorder request: unknown editor", "ClaimRecorderRequest", {**CLAIM_REQ, "editor": "emacs"})
+I("claim recorder refused: unknown holder editor", "ClaimRecorderResponse", {**CLAIM_REFUSED, "holderEditor": "emacs"})
+I("claim recorder response: unknown status", "ClaimRecorderResponse", {"status": "queued"})
+I("put blob response: truncated not a boolean", "PutBlobResponse", {**PUT_BLOB, "truncated": 1})
+for bad_v in (-1, 1.5, "1"):
+    I(f"put blob response: storedBytes = {bad_v!r}", "PutBlobResponse", {**PUT_BLOB, "storedBytes": bad_v})
+    I(f"put blob response: originalBytes = {bad_v!r}", "PutBlobResponse", {**PUT_BLOB, "originalBytes": bad_v})
+    I(f"events since request: afterTick = {bad_v!r}", "EventsSinceRequest", {**SINCE_REQ, "afterTick": bad_v})
+for bad_v in (0, 1.5, "1"):
+    I(f"ingest accepted: tick = {bad_v!r}", "IngestOutcome", {**ACCEPTED, "tick": bad_v})
+    I(f"create branch request: fromTick = {bad_v!r}", "CreateBranchRequest", {**BRANCH_REQ, "fromTick": bad_v})
+    I(f"search hit: tick = {bad_v!r}", "SearchHit", {**SEARCH_HIT, "tick": bad_v})
+    I(f"search request: limit = {bad_v!r}", "SearchRequest", {**SEARCH_REQ, "limit": bad_v})
+    I(f"store limits: snapshotInterval = {bad_v!r}", "StoreLimits", {"snapshotInterval": bad_v})
+    I(f"store limits: maxStoredOutputBytes = {bad_v!r}", "StoreLimits", {"maxStoredOutputBytes": bad_v})
+    I(f"store limits: indexedTextBytesPerItem = {bad_v!r}", "StoreLimits", {"indexedTextBytesPerItem": bad_v})
+    I(f"store limits: chatMessageMaxBytes = {bad_v!r}", "StoreLimits", {"chatMessageMaxBytes": bad_v})
+for bad_v in (-1, 1.5, "1"):
+    I(f"store limits: inlineOutputBytes = {bad_v!r}", "StoreLimits", {"inlineOutputBytes": bad_v})
+    I(f"store limits: truncatedPreviewBytes = {bad_v!r}", "StoreLimits", {"truncatedPreviewBytes": bad_v})
+for bad_v in (0, 10, 1.5, "6"):
+    I(f"store limits: blobGzipLevel = {bad_v!r}", "StoreLimits", {"blobGzipLevel": bad_v})
+I("events since response: apiVersion 2", "EventsSinceResponse", {**SINCE_RESP, "apiVersion": 2})
+I("events since response: events carry no tick", "EventsSinceResponse", {**SINCE_RESP, "events": [_rec_ok]})
+I("events since response: outline not an outline", "EventsSinceResponse", {**SINCE_RESP, "outline": {"explorationId": "x"}})
+I("search request: kinds not a list", "SearchRequest", {**SEARCH_REQ, "kinds": "code"})
+I("search request: unknown kind", "SearchRequest", {**SEARCH_REQ, "kinds": ["image"]})
+I("search request: query not a string", "SearchRequest", {**SEARCH_REQ, "query": 1})
+I("search hit: unknown kind", "SearchHit", {**SEARCH_HIT, "kind": "snippet"})
+I("search response: hits not a list", "SearchResponse", {**SEARCH_RESP, "hits": SEARCH_HIT})
+for bad_v in (0, 1.5, "1"):
+    I(f"state at request: tick = {bad_v!r}", "StateAtRequest", {**STATE_REQ, "tick": bad_v})
+I("ingest request: unknown editor", "IngestRequest", {**INGEST_REQ, "editor": "emacs"})
+I("ingest request: instanceId not a string", "IngestRequest", {**INGEST_REQ, "instanceId": 1})
+I("get blob request: contentHash not a string", "GetBlobRequest", {**BLOB_REQ, "contentHash": 1})
+I("outline request: explorationId not a string", "OutlineRequest", {"explorationId": 1})
+I("service info: apiVersion 2", "ServiceInfo", {**INFO, "apiVersion": 2})
+I("service info: schemaVersion 1", "ServiceInfo", {**INFO, "schemaVersion": 1})
+I("store limits: extra key", "StoreLimits", {"snapshotInterval": 200, "extra": 1})
+
+# --- service API: adversarial (reviewer) ----------------------------------------
+V("store limits: gzip level 1 and 9 (bounds)", "StoreLimits", {"blobGzipLevel": 1})
+V("store limits: gzip level 9", "StoreLimits", {"blobGzipLevel": 9})
+V("store limits: zero inline and preview bytes", "StoreLimits", {"inlineOutputBytes": 0, "truncatedPreviewBytes": 0})
+V("search request: limit 1 (bound)", "SearchRequest", {**SEARCH_REQ, "limit": 1})
+V("events since request: afterTick 0 (bound)", "EventsSinceRequest", SINCE_REQ)
+V("ingest request: several event kinds", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, _rec_ok, _rec_snap]})
+I("ingest request: second event carries a branchId", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, {**_rec_ok, "branchId": "branch-main"}]})
+I("ingest request: second event carries a tick", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, {**_rec_ok, "tick": 3}]})
+I("ingest request: a full stored event instead of a recorder event", "IngestRequest", {**INGEST_REQ, "events": [EVENTS["cell_deleted"]]})
+I("ingest request: second event missing eventId", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, without(_rec_ok, "eventId")]})
+I("ingest request: second event type and payload of different events", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, {**_rec_ok, "payload": {"kernelId": "kernel-1", "reason": "crash"}}]})
+I("ingest request: second event has an unknown type", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, {**_rec_ok, "type": "cell_exploded"}]})
+I("ingest request: an event is null", "IngestRequest", {**INGEST_REQ, "events": [_rec_snap, None]})
+I("ingest request: wrong event schema version", "IngestRequest", {**INGEST_REQ, "events": [{**_rec_ok, "schemaVersion": 1}]})
+I("ingest outcome: refused with accepted fields (tick)", "IngestOutcome", {**REFUSED, "tick": 3})
+I("ingest outcome: refused with accepted fields (branchId, duplicate)", "IngestOutcome", {**REFUSED, "branchId": "branch-main", "duplicate": False})
+I("ingest outcome: accepted with refused fields (detail)", "IngestOutcome", {**ACCEPTED, "detail": "x"})
+I("ingest outcome: accepted with rebuild", "IngestOutcome", {**ACCEPTED, "rebuild": _inv_result})
+I("ingest outcome: no status", "IngestOutcome", without(ACCEPTED, "status"))
+I("ingest outcome: status null", "IngestOutcome", {**ACCEPTED, "status": None})
+I("ingest outcome: accepted shape under refused status", "IngestOutcome", {**ACCEPTED, "status": "refused"})
+I("ingest outcome: refused shape under accepted status", "IngestOutcome", {**REFUSED, "status": "accepted"})
+I("ingest outcome: refused rebuild with invalid nested reason", "IngestOutcome", {**REFUSED_INVALID, "rebuild": {**_inv_result, "reason": "nope"}})
+I("ingest response: one bad outcome among good", "IngestResponse", {**INGEST_RESP, "outcomes": [ACCEPTED, {**REFUSED, "reason": "because"}]})
+I("ingest response: one outcome of mixed members", "IngestResponse", {**INGEST_RESP, "outcomes": [ACCEPTED, {**ACCEPTED, "reason": "conflict", "detail": "x"}]})
+I("ingest response: no apiVersion", "IngestResponse", without(INGEST_RESP, "apiVersion"))
+I("create branch response: ok with refused fields", "CreateBranchResponse", {**BRANCH_OK, "reason": "unknown_moment", "detail": "x"})
+I("create branch response: refused with a branch", "CreateBranchResponse", {**BRANCH_REFUSED, "branch": OUTLINE["branches"][1]})
+I("create branch response: no status", "CreateBranchResponse", without(BRANCH_OK, "status"))
+I("create branch response: refused shape under ok status", "CreateBranchResponse", {**BRANCH_REFUSED, "status": "ok"})
+I("set active branch response: ok with refused fields", "SetActiveBranchResponse", {**ACTIVE_OK, "reason": "unknown_branch", "detail": "x"})
+I("set active branch response: refused with branchId", "SetActiveBranchResponse", {**ACTIVE_REFUSED, "branchId": "branch-b"})
+I("set active branch response: unknown status", "SetActiveBranchResponse", {**ACTIVE_OK, "status": "maybe"})
+I("claim recorder response: granted with holderEditor", "ClaimRecorderResponse", {**CLAIM_GRANTED, "holderEditor": "vscode"})
+I("claim recorder response: refused with no holderEditor", "ClaimRecorderResponse", without(CLAIM_REFUSED, "holderEditor"))
+I("claim recorder response: no status", "ClaimRecorderResponse", without(CLAIM_REFUSED, "status"))
+I("claim recorder response: refused shape under granted status", "ClaimRecorderResponse", {**CLAIM_REFUSED, "status": "granted"})
+I("events since response: one event with a tick but an invalid payload", "EventsSinceResponse", {**SINCE_RESP, "events": [EVENTS["cell_inserted"], {**EVENTS["cell_deleted"], "payload": {}}]})
+I("events since response: a recorder event (no tick) among stored events", "EventsSinceResponse", {**SINCE_RESP, "events": [EVENTS["cell_inserted"], _rec_ok]})
+I("events since response: outline with a bad branch", "EventsSinceResponse", {**SINCE_RESP, "outline": {**OUTLINE, "branches": [{"branchId": "x"}]}})
+I("search response: one bad hit among good", "SearchResponse", {**SEARCH_RESP, "hits": [SEARCH_HIT, {**SEARCH_HIT, "kind": "image"}]})
+I("search request: kinds with a null", "SearchRequest", {**SEARCH_REQ, "kinds": ["code", None]})
+I("store limits: blobGzipLevel true", "StoreLimits", {"blobGzipLevel": True})
+I("store limits: blobGzipLevel 6.0 as a string", "StoreLimits", {"blobGzipLevel": "6.0"})
+I("store limits: blobGzipLevel -1", "StoreLimits", {"blobGzipLevel": -1})
+I("store limits: snapshotInterval true", "StoreLimits", {"snapshotInterval": True})
+I("put blob response: truncated null", "PutBlobResponse", {**PUT_BLOB, "truncated": None})
+I("service info: schemaVersion 3", "ServiceInfo", {**INFO, "schemaVersion": 3})
+I("service info: apiVersion as a string", "ServiceInfo", {**INFO, "apiVersion": "1"})
+I("ingest accepted: tick true", "IngestOutcome", {**ACCEPTED, "tick": True})
+
 names = [c["name"] for c in invalid]
 assert len(names) == len(set(names)), [n for n in names if names.count(n) > 1]
 

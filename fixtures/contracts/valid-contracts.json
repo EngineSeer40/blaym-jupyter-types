@@ -2465,5 +2465,969 @@
         "runSpans": []
       }
     }
+  },
+  {
+    "name": "ingest request",
+    "contract": "IngestRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000003,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_deleted",
+          "payload": {
+            "cellId": "cell-2"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "ingest request with target branch",
+    "contract": "IngestRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000003,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_deleted",
+          "payload": {
+            "cellId": "cell-2"
+          }
+        }
+      ],
+      "targetBranchId": "branch-b"
+    }
+  },
+  {
+    "name": "ingest request with no events",
+    "contract": "IngestRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "events": []
+    }
+  },
+  {
+    "name": "ingest accepted",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "accepted",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "branchId": "branch-main",
+      "tick": 3,
+      "duplicate": false
+    }
+  },
+  {
+    "name": "ingest accepted duplicate",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "accepted",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "branchId": "branch-main",
+      "tick": 3,
+      "duplicate": true
+    }
+  },
+  {
+    "name": "ingest refused",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "not_active_recorder",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refused invalid event with rebuild",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "invalid_event",
+      "detail": "The run is not running.",
+      "rebuild": {
+        "status": "invalid_event",
+        "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+        "tick": 9,
+        "reason": "unknown_run",
+        "detail": "run_finished for a run that was never started"
+      }
+    }
+  },
+  {
+    "name": "ingest refusal reason: unauthorized",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "unauthorized",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: unsupported_schema_version",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "unsupported_schema_version",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: unknown_branch",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "unknown_branch",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: not_active_recorder",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "not_active_recorder",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: invalid_event",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "invalid_event",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: conflict",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "conflict",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: missing_blob",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "missing_blob",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest refusal reason: bad_first_event",
+    "contract": "IngestOutcome",
+    "value": {
+      "status": "refused",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+      "reason": "bad_first_event",
+      "detail": "Another editor is recording this notebook."
+    }
+  },
+  {
+    "name": "ingest response",
+    "contract": "IngestResponse",
+    "value": {
+      "apiVersion": 1,
+      "outcomes": [
+        {
+          "status": "accepted",
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+          "branchId": "branch-main",
+          "tick": 3,
+          "duplicate": false
+        },
+        {
+          "status": "accepted",
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+          "branchId": "branch-main",
+          "tick": 3,
+          "duplicate": true
+        },
+        {
+          "status": "refused",
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+          "reason": "not_active_recorder",
+          "detail": "Another editor is recording this notebook."
+        }
+      ]
+    }
+  },
+  {
+    "name": "create branch request",
+    "contract": "CreateBranchRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "fromBranchId": "branch-main",
+      "fromTick": 4,
+      "name": "try again"
+    }
+  },
+  {
+    "name": "create branch ok",
+    "contract": "CreateBranchResponse",
+    "value": {
+      "status": "ok",
+      "branch": {
+        "branchId": "branch-b",
+        "name": "try again",
+        "parentBranchId": "branch-main",
+        "parentTick": 4,
+        "ownTicks": [
+          6,
+          7,
+          9
+        ],
+        "runSpans": []
+      }
+    }
+  },
+  {
+    "name": "create branch refused: unknown_moment",
+    "contract": "CreateBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "unknown_moment",
+      "detail": "A cell was still running at that moment."
+    }
+  },
+  {
+    "name": "create branch refused: moment_not_rebuildable",
+    "contract": "CreateBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "moment_not_rebuildable",
+      "detail": "A cell was still running at that moment."
+    }
+  },
+  {
+    "name": "create branch refused: unsettled_moment",
+    "contract": "CreateBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "unsettled_moment",
+      "detail": "A cell was still running at that moment."
+    }
+  },
+  {
+    "name": "create branch refused: not_on_line",
+    "contract": "CreateBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "not_on_line",
+      "detail": "A cell was still running at that moment."
+    }
+  },
+  {
+    "name": "create branch refused: unauthorized",
+    "contract": "CreateBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "unauthorized",
+      "detail": "A cell was still running at that moment."
+    }
+  },
+  {
+    "name": "set active branch request",
+    "contract": "SetActiveBranchRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-b"
+    }
+  },
+  {
+    "name": "set active branch ok",
+    "contract": "SetActiveBranchResponse",
+    "value": {
+      "status": "ok",
+      "branchId": "branch-b"
+    }
+  },
+  {
+    "name": "set active branch refused",
+    "contract": "SetActiveBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "unknown_branch",
+      "detail": "No such branch."
+    }
+  },
+  {
+    "name": "set active branch refused unauthorized",
+    "contract": "SetActiveBranchResponse",
+    "value": {
+      "status": "refused",
+      "reason": "unauthorized",
+      "detail": "No such branch."
+    }
+  },
+  {
+    "name": "claim recorder request",
+    "contract": "ClaimRecorderRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1"
+    }
+  },
+  {
+    "name": "claim recorder granted",
+    "contract": "ClaimRecorderResponse",
+    "value": {
+      "status": "granted"
+    }
+  },
+  {
+    "name": "claim recorder refused",
+    "contract": "ClaimRecorderResponse",
+    "value": {
+      "status": "refused",
+      "holderEditor": "vscode",
+      "detail": "VS Code is recording this notebook."
+    }
+  },
+  {
+    "name": "put blob response",
+    "contract": "PutBlobResponse",
+    "value": {
+      "contentHash": "sha256:ab12",
+      "storedBytes": 120,
+      "originalBytes": 400,
+      "truncated": false
+    }
+  },
+  {
+    "name": "put blob response truncated",
+    "contract": "PutBlobResponse",
+    "value": {
+      "contentHash": "sha256:ab12",
+      "storedBytes": 0,
+      "originalBytes": 0,
+      "truncated": true
+    }
+  },
+  {
+    "name": "events since request",
+    "contract": "EventsSinceRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "afterTick": 0
+    }
+  },
+  {
+    "name": "events since response",
+    "contract": "EventsSinceResponse",
+    "value": {
+      "apiVersion": 1,
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 1,
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 2,
+          "wallTimeMs": 1760000000002,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_inserted",
+          "payload": {
+            "cellId": "cell-2",
+            "index": 1,
+            "cellType": "markdown",
+            "code": "# Title",
+            "revision": 1,
+            "metadata": {}
+          },
+          "authorHint": "person",
+          "links": {
+            "cellId": "cell-2",
+            "cellRevision": 1
+          }
+        }
+      ],
+      "outline": {
+        "schemaVersion": 2,
+        "explorationId": "exploration-1",
+        "rootBranchId": "branch-main",
+        "highestTick": 9,
+        "branches": [
+          {
+            "branchId": "branch-main",
+            "name": "main",
+            "ownTicks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              8
+            ],
+            "runSpans": [
+              {
+                "runId": "run-1",
+                "startedTick": 2,
+                "endedTick": 4
+              },
+              {
+                "runId": "run-2",
+                "startedTick": 5
+              }
+            ]
+          },
+          {
+            "branchId": "branch-b",
+            "name": "try again",
+            "parentBranchId": "branch-main",
+            "parentTick": 4,
+            "ownTicks": [
+              6,
+              7,
+              9
+            ],
+            "runSpans": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "events since response with no events",
+    "contract": "EventsSinceResponse",
+    "value": {
+      "apiVersion": 1,
+      "events": [],
+      "outline": {
+        "schemaVersion": 2,
+        "explorationId": "exploration-1",
+        "rootBranchId": "branch-main",
+        "highestTick": 9,
+        "branches": [
+          {
+            "branchId": "branch-main",
+            "name": "main",
+            "ownTicks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              8
+            ],
+            "runSpans": [
+              {
+                "runId": "run-1",
+                "startedTick": 2,
+                "endedTick": 4
+              },
+              {
+                "runId": "run-2",
+                "startedTick": 5
+              }
+            ]
+          },
+          {
+            "branchId": "branch-b",
+            "name": "try again",
+            "parentBranchId": "branch-main",
+            "parentTick": 4,
+            "ownTicks": [
+              6,
+              7,
+              9
+            ],
+            "runSpans": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "search request",
+    "contract": "SearchRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "query": "residuals"
+    }
+  },
+  {
+    "name": "search request with kinds and limit",
+    "contract": "SearchRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "query": "residuals",
+      "kinds": [
+        "code",
+        "chat",
+        "output_text",
+        "table_columns",
+        "chart_text"
+      ],
+      "limit": 20
+    }
+  },
+  {
+    "name": "search hit",
+    "contract": "SearchHit",
+    "value": {
+      "branchId": "branch-main",
+      "tick": 5,
+      "kind": "code",
+      "snippet": "plot(residuals)"
+    }
+  },
+  {
+    "name": "search hit kind: chat",
+    "contract": "SearchHit",
+    "value": {
+      "branchId": "branch-main",
+      "tick": 5,
+      "kind": "chat",
+      "snippet": "plot(residuals)"
+    }
+  },
+  {
+    "name": "search hit kind: output_text",
+    "contract": "SearchHit",
+    "value": {
+      "branchId": "branch-main",
+      "tick": 5,
+      "kind": "output_text",
+      "snippet": "plot(residuals)"
+    }
+  },
+  {
+    "name": "search hit kind: table_columns",
+    "contract": "SearchHit",
+    "value": {
+      "branchId": "branch-main",
+      "tick": 5,
+      "kind": "table_columns",
+      "snippet": "plot(residuals)"
+    }
+  },
+  {
+    "name": "search hit kind: chart_text",
+    "contract": "SearchHit",
+    "value": {
+      "branchId": "branch-main",
+      "tick": 5,
+      "kind": "chart_text",
+      "snippet": "plot(residuals)"
+    }
+  },
+  {
+    "name": "search response",
+    "contract": "SearchResponse",
+    "value": {
+      "apiVersion": 1,
+      "hits": [
+        {
+          "branchId": "branch-main",
+          "tick": 5,
+          "kind": "code",
+          "snippet": "plot(residuals)"
+        }
+      ]
+    }
+  },
+  {
+    "name": "store limits",
+    "contract": "StoreLimits",
+    "value": {
+      "snapshotInterval": 200,
+      "inlineOutputBytes": 16384,
+      "maxStoredOutputBytes": 10485760,
+      "truncatedPreviewBytes": 262144,
+      "indexedTextBytesPerItem": 65536,
+      "chatMessageMaxBytes": 1048576,
+      "blobGzipLevel": 6
+    }
+  },
+  {
+    "name": "store limits empty",
+    "contract": "StoreLimits",
+    "value": {}
+  },
+  {
+    "name": "store limits partial",
+    "contract": "StoreLimits",
+    "value": {
+      "snapshotInterval": 50
+    }
+  },
+  {
+    "name": "service info",
+    "contract": "ServiceInfo",
+    "value": {
+      "apiVersion": 1,
+      "schemaVersion": 2
+    }
+  },
+  {
+    "name": "state at request",
+    "contract": "StateAtRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 4
+    }
+  },
+  {
+    "name": "outline request",
+    "contract": "OutlineRequest",
+    "value": {
+      "explorationId": "exploration-1"
+    }
+  },
+  {
+    "name": "get blob request",
+    "contract": "GetBlobRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "contentHash": "sha256:ab12"
+    }
+  },
+  {
+    "name": "store limits: gzip level 1 and 9 (bounds)",
+    "contract": "StoreLimits",
+    "value": {
+      "blobGzipLevel": 1
+    }
+  },
+  {
+    "name": "store limits: gzip level 9",
+    "contract": "StoreLimits",
+    "value": {
+      "blobGzipLevel": 9
+    }
+  },
+  {
+    "name": "store limits: zero inline and preview bytes",
+    "contract": "StoreLimits",
+    "value": {
+      "inlineOutputBytes": 0,
+      "truncatedPreviewBytes": 0
+    }
+  },
+  {
+    "name": "search request: limit 1 (bound)",
+    "contract": "SearchRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "query": "residuals",
+      "limit": 1
+    }
+  },
+  {
+    "name": "events since request: afterTick 0 (bound)",
+    "contract": "EventsSinceRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "afterTick": 0
+    }
+  },
+  {
+    "name": "ingest request: several event kinds",
+    "contract": "IngestRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "editor": "jupyterlab",
+      "instanceId": "tab-1",
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000003,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_deleted",
+          "payload": {
+            "cellId": "cell-2"
+          }
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        }
+      ]
+    }
   }
 ]

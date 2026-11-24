@@ -996,3 +996,350 @@ export interface HistoryAdvanced {
    */
   runsEnded?: string[];
 }
+
+// ---------------------------------------------------------------------------
+// Service API (S4): requests and answers of Blaym's service. Plain data only;
+// the transport (in-process now, HTTP later) is not part of the contract.
+// ---------------------------------------------------------------------------
+
+/** The version of the service API itself (separate from `schemaVersion`). */
+export type ApiVersion = 1;
+
+/** Why the service refused one event. */
+export type IngestRefusalReason =
+  | 'unauthorized'
+  | 'unsupported_schema_version'
+  | 'unknown_branch'
+  | 'not_active_recorder'
+  | 'invalid_event'
+  | 'conflict'
+  | 'missing_blob'
+  | 'bad_first_event';
+
+/**
+ * Events from a recorder. They go to the active branch unless
+ * `targetBranchId` names another existing branch (a change made just before a
+ * branch switch and delivered just after).
+ * @additionalProperties false
+ */
+export interface IngestRequest {
+  explorationId: string;
+  targetBranchId?: string;
+  /** The editor sending the events; the claimant of the one-recorder lease. */
+  editor: Editor;
+  /** The recorder instance sending the events (for example one browser tab). */
+  instanceId: string;
+  events: RecorderEvent[];
+}
+
+/**
+ * The event is stored. `duplicate` is true when the same event (same id and
+ * content) was already stored; the existing record is returned.
+ * @additionalProperties false
+ */
+export interface IngestAccepted {
+  status: 'accepted';
+  eventId: string;
+  branchId: string;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  tick: number;
+  duplicate: boolean;
+}
+
+/**
+ * The event is not stored. `rebuild` carries the rebuilder's own answer when
+ * the reason is `invalid_event`.
+ * @additionalProperties false
+ */
+export interface IngestRefused {
+  status: 'refused';
+  eventId: string;
+  reason: IngestRefusalReason;
+  /** A short plain-language explanation. */
+  detail: string;
+  rebuild?: RebuildResult;
+}
+
+export type IngestOutcome = IngestAccepted | IngestRefused;
+
+/**
+ * One outcome per event of the request, in the same order.
+ * @additionalProperties false
+ */
+export interface IngestResponse {
+  apiVersion: ApiVersion;
+  outcomes: IngestOutcome[];
+}
+
+/**
+ * Start a branch at a moment of an existing branch.
+ * @additionalProperties false
+ */
+export interface CreateBranchRequest {
+  explorationId: string;
+  fromBranchId: string;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  fromTick: number;
+  name: string;
+}
+
+export type CreateBranchRefusalReason =
+  | 'unknown_moment'
+  | 'moment_not_rebuildable'
+  | 'unsettled_moment'
+  | 'not_on_line'
+  | 'unauthorized';
+
+/** @additionalProperties false */
+export interface CreateBranchOk {
+  status: 'ok';
+  branch: OutlineBranch;
+}
+
+/** @additionalProperties false */
+export interface CreateBranchRefused {
+  status: 'refused';
+  reason: CreateBranchRefusalReason;
+  /** A short plain-language explanation. */
+  detail: string;
+}
+
+export type CreateBranchResponse = CreateBranchOk | CreateBranchRefused;
+
+/** @additionalProperties false */
+export interface SetActiveBranchRequest {
+  explorationId: string;
+  branchId: string;
+}
+
+export type SetActiveBranchRefusalReason = 'unknown_branch' | 'unauthorized';
+
+/** @additionalProperties false */
+export interface SetActiveBranchOk {
+  status: 'ok';
+  branchId: string;
+}
+
+/** @additionalProperties false */
+export interface SetActiveBranchRefused {
+  status: 'refused';
+  reason: SetActiveBranchRefusalReason;
+  /** A short plain-language explanation. */
+  detail: string;
+}
+
+export type SetActiveBranchResponse = SetActiveBranchOk | SetActiveBranchRefused;
+
+/**
+ * Ask to be the one recorder of a history. Tabs of the same editor share it.
+ * @additionalProperties false
+ */
+export interface ClaimRecorderRequest {
+  explorationId: string;
+  editor: Editor;
+  /** One recorder instance (for example one browser tab). */
+  instanceId: string;
+}
+
+/** @additionalProperties false */
+export interface ClaimRecorderGranted {
+  status: 'granted';
+}
+
+/** @additionalProperties false */
+export interface ClaimRecorderRefused {
+  status: 'refused';
+  /** The editor that holds the lease now. */
+  holderEditor: Editor;
+  /** A short plain-language explanation. */
+  detail: string;
+}
+
+export type ClaimRecorderResponse = ClaimRecorderGranted | ClaimRecorderRefused;
+
+/**
+ * What storing a blob did. `contentHash` is the hash of what was stored
+ * (redacted and, if too big, shortened); `truncated` says it was shortened.
+ * @additionalProperties false
+ */
+export interface PutBlobResponse {
+  contentHash: string;
+  /**
+   * @asType integer
+   * @minimum 0
+   */
+  storedBytes: number;
+  /**
+   * @asType integer
+   * @minimum 0
+   */
+  originalBytes: number;
+  truncated: boolean;
+}
+
+/**
+ * Ask for the events after a tick on a branch's line (what a viewer missed).
+ * @additionalProperties false
+ */
+export interface EventsSinceRequest {
+  explorationId: string;
+  branchId: string;
+  /**
+   * Events with a higher tick are returned; 0 means from the start.
+   * @asType integer
+   * @minimum 0
+   */
+  afterTick: number;
+}
+
+/**
+ * The answer to the navigator's "what did I miss": the stored events after a
+ * tick on a branch's line, and the outline as it is now.
+ * @additionalProperties false
+ */
+export interface EventsSinceResponse {
+  apiVersion: ApiVersion;
+  events: BlaymEvent[];
+  outline: HistoryOutline;
+}
+
+/** What kind of thing a search hit is. */
+export type SearchHitKind =
+  | 'code'
+  | 'chat'
+  | 'output_text'
+  | 'table_columns'
+  | 'chart_text';
+
+/** @additionalProperties false */
+export interface SearchRequest {
+  explorationId: string;
+  query: string;
+  kinds?: SearchHitKind[];
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  limit?: number;
+}
+
+/**
+ * A past moment where the query was found.
+ * @additionalProperties false
+ */
+export interface SearchHit {
+  branchId: string;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  tick: number;
+  kind: SearchHitKind;
+  /** A short piece of the matching text. */
+  snippet: string;
+}
+
+/** @additionalProperties false */
+export interface SearchResponse {
+  apiVersion: ApiVersion;
+  hits: SearchHit[];
+}
+
+/**
+ * Size limits and intervals. Every field is optional; a missing field uses its
+ * default (in brackets).
+ * @additionalProperties false
+ */
+export interface StoreLimits {
+  /**
+   * Events between kept snapshots (200).
+   * @asType integer
+   * @minimum 1
+   */
+  snapshotInterval?: number;
+  /**
+   * Output kept inline in the event, up to this size (16384).
+   * @asType integer
+   * @minimum 0
+   */
+  inlineOutputBytes?: number;
+  /**
+   * Largest output stored in full (10485760).
+   * @asType integer
+   * @minimum 1
+   */
+  maxStoredOutputBytes?: number;
+  /**
+   * Preview kept of a truncated output (262144).
+   * @asType integer
+   * @minimum 0
+   */
+  truncatedPreviewBytes?: number;
+  /**
+   * Text indexed per item (65536).
+   * @asType integer
+   * @minimum 1
+   */
+  indexedTextBytesPerItem?: number;
+  /**
+   * Largest chat message kept (1048576).
+   * @asType integer
+   * @minimum 1
+   */
+  chatMessageMaxBytes?: number;
+  /**
+   * Blob compression, gzip level (6).
+   * @asType integer
+   * @minimum 1
+   * @maximum 9
+   */
+  blobGzipLevel?: number;
+}
+
+/**
+ * What a service says about itself.
+ * @additionalProperties false
+ */
+export interface ServiceInfo {
+  apiVersion: ApiVersion;
+  /** The event schema version the service accepts. */
+  schemaVersion: 2;
+}
+
+/**
+ * Ask for the rebuilt state at a position. The answer is a `RebuildResult`.
+ * @additionalProperties false
+ */
+export interface StateAtRequest {
+  explorationId: string;
+  branchId: string;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  tick: number;
+}
+
+/**
+ * Ask for the shape of a history. The answer is a `HistoryOutline`.
+ * @additionalProperties false
+ */
+export interface OutlineRequest {
+  explorationId: string;
+}
+
+/**
+ * Ask for a stored blob's content. The answer is the bytes themselves, which
+ * are transport-level and not a contract.
+ * @additionalProperties false
+ */
+export interface GetBlobRequest {
+  explorationId: string;
+  contentHash: string;
+}

@@ -19,6 +19,15 @@ from pydantic import (
 )
 
 
+class ApiVersion(RootModel[Literal[1]]):
+    root: Annotated[
+        Literal[1],
+        Field(
+            description='The version of the service API itself (separate from `schemaVersion`).'
+        ),
+    ]
+
+
 class AuthorConfidence(StrEnum):
     known = 'known'
     guess = 'guess'
@@ -117,6 +126,42 @@ class ChatSenderKind(StrEnum):
     agent = 'agent'
 
 
+class ClaimRecorderGranted(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    status: Literal['granted']
+
+
+class CreateBranchRefusalReason(StrEnum):
+    unknown_moment = 'unknown_moment'
+    moment_not_rebuildable = 'moment_not_rebuildable'
+    unsettled_moment = 'unsettled_moment'
+    not_on_line = 'not_on_line'
+    unauthorized = 'unauthorized'
+
+
+class CreateBranchRefused(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    detail: Annotated[
+        StrictStr, Field(description='A short plain-language explanation.')
+    ]
+    reason: CreateBranchRefusalReason
+    status: Literal['refused']
+
+
+class CreateBranchRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    explorationId: StrictStr
+    fromBranchId: StrictStr
+    fromTick: Annotated[StrictInt, Field(ge=1)]
+    name: StrictStr
+
+
 class Editor(StrEnum):
     jupyterlab = 'jupyterlab'
     notebook7 = 'notebook7'
@@ -132,6 +177,21 @@ class EventLinks(BaseModel):
     cellRevision: Annotated[StrictInt | None, Field(ge=1)] = None
     chatTurnId: StrictStr | None = None
     runId: StrictStr | None = None
+
+
+class EventsSinceRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    afterTick: Annotated[
+        StrictInt,
+        Field(
+            description='Events with a higher tick are returned; 0 means from the start.',
+            ge=0,
+        ),
+    ]
+    branchId: StrictStr
+    explorationId: StrictStr
 
 
 class GapReason(StrEnum):
@@ -161,6 +221,36 @@ class GapState(BaseModel):
     reason: GapReason
     source: GapSource
     startedTick: Annotated[StrictInt, Field(ge=1)]
+
+
+class GetBlobRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    contentHash: StrictStr
+    explorationId: StrictStr
+
+
+class IngestAccepted(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    duplicate: StrictBool
+    eventId: StrictStr
+    status: Literal['accepted']
+    tick: Annotated[StrictInt, Field(ge=1)]
+
+
+class IngestRefusalReason(StrEnum):
+    unauthorized = 'unauthorized'
+    unsupported_schema_version = 'unsupported_schema_version'
+    unknown_branch = 'unknown_branch'
+    not_active_recorder = 'not_active_recorder'
+    invalid_event = 'invalid_event'
+    conflict = 'conflict'
+    missing_blob = 'missing_blob'
+    bad_first_event = 'bad_first_event'
 
 
 class InvalidEventReason(StrEnum):
@@ -222,6 +312,13 @@ class NotebookRenamedPayload(BaseModel):
     oldPath: StrictStr
 
 
+class OutlineRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    explorationId: StrictStr
+
+
 class OutlineRunSpan(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -263,6 +360,16 @@ class OutsideChangeMarker(BaseModel):
         extra='forbid',
     )
     tick: Annotated[StrictInt, Field(ge=1)]
+
+
+class PutBlobResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    contentHash: StrictStr
+    originalBytes: Annotated[StrictInt, Field(ge=0)]
+    storedBytes: Annotated[StrictInt, Field(ge=0)]
+    truncated: StrictBool
 
 
 class RebuildInvalidEvent(BaseModel):
@@ -770,6 +877,79 @@ class RunStatus(
     ]
 
 
+class SearchHitKind(StrEnum):
+    code = 'code'
+    chat = 'chat'
+    output_text = 'output_text'
+    table_columns = 'table_columns'
+    chart_text = 'chart_text'
+
+
+class SearchRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    explorationId: StrictStr
+    kinds: list[SearchHitKind] | None = None
+    limit: Annotated[StrictInt | None, Field(ge=1)] = None
+    query: StrictStr
+
+
+class ServiceInfo(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    schemaVersion: Annotated[
+        Literal[2], Field(description='The event schema version the service accepts.')
+    ]
+
+
+class SetActiveBranchOk(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    status: Literal['ok']
+
+
+class SetActiveBranchRefusalReason(StrEnum):
+    unknown_branch = 'unknown_branch'
+    unauthorized = 'unauthorized'
+
+
+class SetActiveBranchRefused(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    detail: Annotated[
+        StrictStr, Field(description='A short plain-language explanation.')
+    ]
+    reason: SetActiveBranchRefusalReason
+    status: Literal['refused']
+
+
+class SetActiveBranchRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    explorationId: StrictStr
+
+
+class SetActiveBranchResponse(RootModel[SetActiveBranchOk | SetActiveBranchRefused]):
+    root: SetActiveBranchOk | SetActiveBranchRefused
+
+
+class StateAtRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    explorationId: StrictStr
+    tick: Annotated[StrictInt, Field(ge=1)]
+
+
 class StatePosition(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -796,6 +976,42 @@ class StatePosition(BaseModel):
             ge=1,
         ),
     ]
+
+
+class StoreLimits(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    blobGzipLevel: Annotated[
+        StrictInt | None,
+        Field(description='Blob compression, gzip level (6).', ge=1, le=9),
+    ] = None
+    chatMessageMaxBytes: Annotated[
+        StrictInt | None,
+        Field(description='Largest chat message kept (1048576).', ge=1),
+    ] = None
+    indexedTextBytesPerItem: Annotated[
+        StrictInt | None, Field(description='Text indexed per item (65536).', ge=1)
+    ] = None
+    inlineOutputBytes: Annotated[
+        StrictInt | None,
+        Field(
+            description='Output kept inline in the event, up to this size (16384).',
+            ge=0,
+        ),
+    ] = None
+    maxStoredOutputBytes: Annotated[
+        StrictInt | None,
+        Field(description='Largest output stored in full (10485760).', ge=1),
+    ] = None
+    snapshotInterval: Annotated[
+        StrictInt | None,
+        Field(description='Events between kept snapshots (200).', ge=1),
+    ] = None
+    truncatedPreviewBytes: Annotated[
+        StrictInt | None,
+        Field(description='Preview kept of a truncated output (262144).', ge=0),
+    ] = None
 
 
 class Tick(RootModel[StrictInt]):
@@ -1184,6 +1400,35 @@ class ChatMessageUpdated(BaseModel):
     workspaceId: Annotated[
         StrictStr, Field(description='"local" in the first version.')
     ]
+
+
+class ClaimRecorderRefused(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    detail: Annotated[
+        StrictStr, Field(description='A short plain-language explanation.')
+    ]
+    holderEditor: Annotated[
+        Editor, Field(description='The editor that holds the lease now.')
+    ]
+    status: Literal['refused']
+
+
+class ClaimRecorderRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    editor: Editor
+    explorationId: StrictStr
+    instanceId: Annotated[
+        StrictStr,
+        Field(description='One recorder instance (for example one browser tab).'),
+    ]
+
+
+class ClaimRecorderResponse(RootModel[ClaimRecorderGranted | ClaimRecorderRefused]):
+    root: ClaimRecorderGranted | ClaimRecorderRefused
 
 
 class EventBase(BaseModel):
@@ -1963,6 +2208,26 @@ class RunState(BaseModel):
     status: RunStatus
 
 
+class SearchHit(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    kind: SearchHitKind
+    snippet: Annotated[
+        StrictStr, Field(description='A short piece of the matching text.')
+    ]
+    tick: Annotated[StrictInt, Field(ge=1)]
+
+
+class SearchResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    hits: list[SearchHit]
+
+
 class CellInsertedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2021,6 +2286,18 @@ class ChatMessageAdded(BaseModel):
     workspaceId: Annotated[
         StrictStr, Field(description='"local" in the first version.')
     ]
+
+
+class CreateBranchOk(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branch: OutlineBranch
+    status: Literal['ok']
+
+
+class CreateBranchResponse(RootModel[CreateBranchOk | CreateBranchRefused]):
+    root: CreateBranchOk | CreateBranchRefused
 
 
 class HistoryAdvanced(BaseModel):
@@ -2482,6 +2759,27 @@ class ChangedOutsideEditor(BaseModel):
     ]
 
 
+class IngestRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    editor: Annotated[
+        Editor,
+        Field(
+            description='The editor sending the events; the claimant of the one-recorder lease.'
+        ),
+    ]
+    events: list[RecorderEvent]
+    explorationId: StrictStr
+    instanceId: Annotated[
+        StrictStr,
+        Field(
+            description='The recorder instance sending the events (for example one browser tab).'
+        ),
+    ]
+    targetBranchId: StrictStr | None = None
+
+
 class NotebookSnapshot(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2629,6 +2927,15 @@ class BlaymEvent(
     ]
 
 
+class EventsSinceResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    events: list[BlaymEvent]
+    outline: HistoryOutline
+
+
 class RebuildConflict(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2664,3 +2971,28 @@ class RebuildResult(
         | RebuildLineageLoop
         | RebuildInvalidEvent
     )
+
+
+class IngestRefused(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    detail: Annotated[
+        StrictStr, Field(description='A short plain-language explanation.')
+    ]
+    eventId: StrictStr
+    reason: IngestRefusalReason
+    rebuild: RebuildResult | None = None
+    status: Literal['refused']
+
+
+class IngestOutcome(RootModel[IngestAccepted | IngestRefused]):
+    root: IngestAccepted | IngestRefused
+
+
+class IngestResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    outcomes: list[IngestOutcome]

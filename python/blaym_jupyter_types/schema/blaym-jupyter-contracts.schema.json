@@ -1,6 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "ApiVersion": {
+      "const": 1,
+      "description": "The version of the service API itself (separate from `schemaVersion`).",
+      "type": "number"
+    },
     "AuthorConfidence": {
       "description": "How sure Blaym is about `authorHint`. `known` when the editor or tool gives a signal (for example an AI action announcement, or an agent edit matched to its saved chat turn); `guess` when inferred (for example by timing). Leave it out with `authorHint: 'unknown'`. The UI says when it is a guess.",
       "enum": [
@@ -1209,6 +1214,159 @@
       ],
       "type": "string"
     },
+    "ClaimRecorderGranted": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "granted",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
+    "ClaimRecorderRefused": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "description": "A short plain-language explanation.",
+          "type": "string"
+        },
+        "holderEditor": {
+          "$ref": "#/definitions/Editor",
+          "description": "The editor that holds the lease now."
+        },
+        "status": {
+          "const": "refused",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "holderEditor",
+        "detail"
+      ],
+      "type": "object"
+    },
+    "ClaimRecorderRequest": {
+      "additionalProperties": false,
+      "description": "Ask to be the one recorder of a history. Tabs of the same editor share it.",
+      "properties": {
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "instanceId": {
+          "description": "One recorder instance (for example one browser tab).",
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "editor",
+        "instanceId"
+      ],
+      "type": "object"
+    },
+    "ClaimRecorderResponse": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ClaimRecorderGranted"
+        },
+        {
+          "$ref": "#/definitions/ClaimRecorderRefused"
+        }
+      ]
+    },
+    "CreateBranchOk": {
+      "additionalProperties": false,
+      "properties": {
+        "branch": {
+          "$ref": "#/definitions/OutlineBranch"
+        },
+        "status": {
+          "const": "ok",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "branch"
+      ],
+      "type": "object"
+    },
+    "CreateBranchRefusalReason": {
+      "enum": [
+        "unknown_moment",
+        "moment_not_rebuildable",
+        "unsettled_moment",
+        "not_on_line",
+        "unauthorized"
+      ],
+      "type": "string"
+    },
+    "CreateBranchRefused": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "description": "A short plain-language explanation.",
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/CreateBranchRefusalReason"
+        },
+        "status": {
+          "const": "refused",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "detail"
+      ],
+      "type": "object"
+    },
+    "CreateBranchRequest": {
+      "additionalProperties": false,
+      "description": "Start a branch at a moment of an existing branch.",
+      "properties": {
+        "explorationId": {
+          "type": "string"
+        },
+        "fromBranchId": {
+          "type": "string"
+        },
+        "fromTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "fromBranchId",
+        "fromTick",
+        "name"
+      ],
+      "type": "object"
+    },
+    "CreateBranchResponse": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/CreateBranchOk"
+        },
+        {
+          "$ref": "#/definitions/CreateBranchRefused"
+        }
+      ]
+    },
     "Editor": {
       "description": "Which editor recorded an event.",
       "enum": [
@@ -1307,6 +1465,53 @@
       },
       "type": "object"
     },
+    "EventsSinceRequest": {
+      "additionalProperties": false,
+      "description": "Ask for the events after a tick on a branch's line (what a viewer missed).",
+      "properties": {
+        "afterTick": {
+          "description": "Events with a higher tick are returned; 0 means from the start.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "branchId": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "branchId",
+        "afterTick"
+      ],
+      "type": "object"
+    },
+    "EventsSinceResponse": {
+      "additionalProperties": false,
+      "description": "The answer to the navigator's \"what did I miss\": the stored events after a tick on a branch's line, and the outline as it is now.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/definitions/BlaymEvent"
+          },
+          "type": "array"
+        },
+        "outline": {
+          "$ref": "#/definitions/HistoryOutline"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "events",
+        "outline"
+      ],
+      "type": "object"
+    },
     "GapReason": {
       "description": "Why a recorder could not see (ADR 0005).",
       "enum": [
@@ -1356,6 +1561,23 @@
         "source",
         "reason",
         "startedTick"
+      ],
+      "type": "object"
+    },
+    "GetBlobRequest": {
+      "additionalProperties": false,
+      "description": "Ask for a stored blob's content. The answer is the bytes themselves, which are transport-level and not a contract.",
+      "properties": {
+        "contentHash": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "contentHash"
       ],
       "type": "object"
     },
@@ -1430,6 +1652,144 @@
         "rootBranchId",
         "highestTick",
         "branches"
+      ],
+      "type": "object"
+    },
+    "IngestAccepted": {
+      "additionalProperties": false,
+      "description": "The event is stored. `duplicate` is true when the same event (same id and content) was already stored; the existing record is returned.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "duplicate": {
+          "type": "boolean"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "status": {
+          "const": "accepted",
+          "type": "string"
+        },
+        "tick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "status",
+        "eventId",
+        "branchId",
+        "tick",
+        "duplicate"
+      ],
+      "type": "object"
+    },
+    "IngestOutcome": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/IngestAccepted"
+        },
+        {
+          "$ref": "#/definitions/IngestRefused"
+        }
+      ]
+    },
+    "IngestRefusalReason": {
+      "description": "Why the service refused one event.",
+      "enum": [
+        "unauthorized",
+        "unsupported_schema_version",
+        "unknown_branch",
+        "not_active_recorder",
+        "invalid_event",
+        "conflict",
+        "missing_blob",
+        "bad_first_event"
+      ],
+      "type": "string"
+    },
+    "IngestRefused": {
+      "additionalProperties": false,
+      "description": "The event is not stored. `rebuild` carries the rebuilder's own answer when the reason is `invalid_event`.",
+      "properties": {
+        "detail": {
+          "description": "A short plain-language explanation.",
+          "type": "string"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/IngestRefusalReason"
+        },
+        "rebuild": {
+          "$ref": "#/definitions/RebuildResult"
+        },
+        "status": {
+          "const": "refused",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "eventId",
+        "reason",
+        "detail"
+      ],
+      "type": "object"
+    },
+    "IngestRequest": {
+      "additionalProperties": false,
+      "description": "Events from a recorder. They go to the active branch unless `targetBranchId` names another existing branch (a change made just before a branch switch and delivered just after).",
+      "properties": {
+        "editor": {
+          "$ref": "#/definitions/Editor",
+          "description": "The editor sending the events; the claimant of the one-recorder lease."
+        },
+        "events": {
+          "items": {
+            "$ref": "#/definitions/RecorderEvent"
+          },
+          "type": "array"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "instanceId": {
+          "description": "The recorder instance sending the events (for example one browser tab).",
+          "type": "string"
+        },
+        "targetBranchId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "editor",
+        "instanceId",
+        "events"
+      ],
+      "type": "object"
+    },
+    "IngestResponse": {
+      "additionalProperties": false,
+      "description": "One outcome per event of the request, in the same order.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "outcomes": {
+          "items": {
+            "$ref": "#/definitions/IngestOutcome"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "outcomes"
       ],
       "type": "object"
     },
@@ -2190,6 +2550,19 @@
       ],
       "type": "object"
     },
+    "OutlineRequest": {
+      "additionalProperties": false,
+      "description": "Ask for the shape of a history. The answer is a `HistoryOutline`.",
+      "properties": {
+        "explorationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId"
+      ],
+      "type": "object"
+    },
     "OutlineRunSpan": {
       "additionalProperties": false,
       "description": "A run on one branch, from the tick it started to the tick it finished.",
@@ -2574,6 +2947,33 @@
       },
       "required": [
         "tick"
+      ],
+      "type": "object"
+    },
+    "PutBlobResponse": {
+      "additionalProperties": false,
+      "description": "What storing a blob did. `contentHash` is the hash of what was stored (redacted and, if too big, shortened); `truncated` says it was shortened.",
+      "properties": {
+        "contentHash": {
+          "type": "string"
+        },
+        "originalBytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "storedBytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "contentHash",
+        "storedBytes",
+        "originalBytes",
+        "truncated"
       ],
       "type": "object"
     },
@@ -4848,6 +5248,202 @@
       ],
       "description": "`unfinished`: the run never reported a finish (for example a kernel restart)."
     },
+    "SearchHit": {
+      "additionalProperties": false,
+      "description": "A past moment where the query was found.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/SearchHitKind"
+        },
+        "snippet": {
+          "description": "A short piece of the matching text.",
+          "type": "string"
+        },
+        "tick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "branchId",
+        "tick",
+        "kind",
+        "snippet"
+      ],
+      "type": "object"
+    },
+    "SearchHitKind": {
+      "description": "What kind of thing a search hit is.",
+      "enum": [
+        "code",
+        "chat",
+        "output_text",
+        "table_columns",
+        "chart_text"
+      ],
+      "type": "string"
+    },
+    "SearchRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "explorationId": {
+          "type": "string"
+        },
+        "kinds": {
+          "items": {
+            "$ref": "#/definitions/SearchHitKind"
+          },
+          "type": "array"
+        },
+        "limit": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "query": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "query"
+      ],
+      "type": "object"
+    },
+    "SearchResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "hits": {
+          "items": {
+            "$ref": "#/definitions/SearchHit"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "hits"
+      ],
+      "type": "object"
+    },
+    "ServiceInfo": {
+      "additionalProperties": false,
+      "description": "What a service says about itself.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "description": "The event schema version the service accepts.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "schemaVersion"
+      ],
+      "type": "object"
+    },
+    "SetActiveBranchOk": {
+      "additionalProperties": false,
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "status": {
+          "const": "ok",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "branchId"
+      ],
+      "type": "object"
+    },
+    "SetActiveBranchRefusalReason": {
+      "enum": [
+        "unknown_branch",
+        "unauthorized"
+      ],
+      "type": "string"
+    },
+    "SetActiveBranchRefused": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "description": "A short plain-language explanation.",
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/SetActiveBranchRefusalReason"
+        },
+        "status": {
+          "const": "refused",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "detail"
+      ],
+      "type": "object"
+    },
+    "SetActiveBranchRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "explorationId",
+        "branchId"
+      ],
+      "type": "object"
+    },
+    "SetActiveBranchResponse": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SetActiveBranchOk"
+        },
+        {
+          "$ref": "#/definitions/SetActiveBranchRefused"
+        }
+      ]
+    },
+    "StateAtRequest": {
+      "additionalProperties": false,
+      "description": "Ask for the rebuilt state at a position. The answer is a `RebuildResult`.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "tick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "explorationId",
+        "branchId",
+        "tick"
+      ],
+      "type": "object"
+    },
     "StatePosition": {
       "additionalProperties": false,
       "properties": {
@@ -4876,6 +5472,49 @@
         "lastEventTick",
         "branchCount"
       ],
+      "type": "object"
+    },
+    "StoreLimits": {
+      "additionalProperties": false,
+      "description": "Size limits and intervals. Every field is optional; a missing field uses its default (in brackets).",
+      "properties": {
+        "blobGzipLevel": {
+          "description": "Blob compression, gzip level (6).",
+          "maximum": 9,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "chatMessageMaxBytes": {
+          "description": "Largest chat message kept (1048576).",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "indexedTextBytesPerItem": {
+          "description": "Text indexed per item (65536).",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "inlineOutputBytes": {
+          "description": "Output kept inline in the event, up to this size (16384).",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "maxStoredOutputBytes": {
+          "description": "Largest output stored in full (10485760).",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "snapshotInterval": {
+          "description": "Events between kept snapshots (200).",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "truncatedPreviewBytes": {
+          "description": "Preview kept of a truncated output (262144).",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
       "type": "object"
     },
     "Tick": {
