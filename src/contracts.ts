@@ -260,6 +260,16 @@ export interface CellTypeChangedPayload {
   cellType: CellType;
 }
 
+/**
+ * The user cleared a cell's output in the editor (a snapshot cannot say this). The cell loses
+ * its output groups, except those of runs that are still running.
+ *
+ * @additionalProperties false
+ */
+export interface CellOutputsClearedPayload {
+  cellId: string;
+}
+
 /** @additionalProperties false */
 export interface CellSourceChangedPayload {
   cellId: string;
@@ -459,6 +469,12 @@ export interface CellTypeChanged extends EventBase {
 }
 
 /** @additionalProperties false */
+export interface CellOutputsCleared extends EventBase {
+  type: 'cell_outputs_cleared';
+  payload: CellOutputsClearedPayload;
+}
+
+/** @additionalProperties false */
 export interface CellSourceChanged extends EventBase {
   type: 'cell_source_changed';
   payload: CellSourceChangedPayload;
@@ -579,6 +595,7 @@ export type BlaymEvent =
   | CellDeleted
   | CellMoved
   | CellTypeChanged
+  | CellOutputsCleared
   | CellSourceChanged
   | CellMetadataChanged
   | NotebookMetadataChanged
@@ -611,6 +628,7 @@ export type RecorderEvent =
   | FromRecorder<CellDeleted>
   | FromRecorder<CellMoved>
   | FromRecorder<CellTypeChanged>
+  | FromRecorder<CellOutputsCleared>
   | FromRecorder<CellSourceChanged>
   | FromRecorder<CellMetadataChanged>
   | FromRecorder<NotebookMetadataChanged>

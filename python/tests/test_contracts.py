@@ -13,7 +13,7 @@ INVALID = json.loads((FIXTURES / "invalid-contracts.json").read_text())
 
 EVENT_TYPES = [
     "notebook_snapshot", "cell_inserted", "cell_deleted", "cell_moved",
-    "cell_type_changed", "cell_source_changed", "cell_metadata_changed",
+    "cell_type_changed", "cell_outputs_cleared", "cell_source_changed", "cell_metadata_changed",
     "notebook_metadata_changed", "run_started", "run_finished", "output_added",
     "output_replaced", "outputs_cleared", "kernel_started", "kernel_restarted",
     "notebook_renamed", "notebook_copied", "changed_outside_editor",

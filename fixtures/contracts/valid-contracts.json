@@ -124,11 +124,30 @@
     }
   },
   {
-    "name": "event cell_type_changed",
+    "name": "event cell_outputs_cleared",
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
       "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0005",
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "tick": 5,
+      "wallTimeMs": 1760000000005,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_outputs_cleared",
+      "payload": {
+        "cellId": "cell-1"
+      }
+    }
+  },
+  {
+    "name": "event cell_type_changed",
+    "contract": "BlaymEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 5,
@@ -148,7 +167,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 6,
@@ -175,7 +194,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0008",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 7,
@@ -197,7 +216,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0008",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0009",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 8,
@@ -218,7 +237,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0009",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000a",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 9,
@@ -243,7 +262,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000a",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000b",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 10,
@@ -263,7 +282,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000b",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000c",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 11,
@@ -295,7 +314,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000c",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000d",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 12,
@@ -327,7 +346,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000d",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000e",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 13,
@@ -348,7 +367,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000e",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 14,
@@ -369,7 +388,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 15,
@@ -389,7 +408,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0011",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 16,
@@ -409,7 +428,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0011",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0012",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 17,
@@ -430,7 +449,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0012",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 18,
@@ -485,7 +504,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 19,
@@ -510,7 +529,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0015",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 20,
@@ -531,7 +550,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0015",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
       "explorationId": "exploration-1",
       "branchId": "branch-b",
       "tick": 21,
@@ -552,7 +571,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 22,
@@ -573,7 +592,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0018",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 23,
@@ -916,7 +935,7 @@
     "contract": "RebuildResult",
     "value": {
       "status": "invalid_revision",
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
       "cellId": "cell-1",
       "expectedRevision": 3,
       "actualRevision": 5
@@ -927,7 +946,7 @@
     "contract": "RebuildInvalidRevision",
     "value": {
       "status": "invalid_revision",
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
       "cellId": "cell-1",
       "expectedRevision": 3,
       "actualRevision": 5
@@ -1281,7 +1300,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 15,
@@ -1301,7 +1320,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 15,
@@ -1321,7 +1340,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 19,
@@ -1346,7 +1365,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 22,
@@ -1521,11 +1540,28 @@
     }
   },
   {
-    "name": "recorder event cell_type_changed",
+    "name": "recorder event cell_outputs_cleared",
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
       "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0005",
+      "explorationId": "exploration-1",
+      "wallTimeMs": 1760000000005,
+      "userId": "local",
+      "workspaceId": "local",
+      "originId": "origin-1",
+      "type": "cell_outputs_cleared",
+      "payload": {
+        "cellId": "cell-1"
+      }
+    }
+  },
+  {
+    "name": "recorder event cell_type_changed",
+    "contract": "RecorderEvent",
+    "value": {
+      "schemaVersion": 2,
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000005,
       "userId": "local",
@@ -1543,7 +1579,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0006",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000006,
       "userId": "local",
@@ -1568,7 +1604,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0007",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0008",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000007,
       "userId": "local",
@@ -1588,7 +1624,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0008",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0009",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000008,
       "userId": "local",
@@ -1607,7 +1643,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0009",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000a",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000009,
       "userId": "local",
@@ -1630,7 +1666,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000a",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000b",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000010,
       "userId": "local",
@@ -1648,7 +1684,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000b",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000c",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000011,
       "userId": "local",
@@ -1678,7 +1714,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000c",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000d",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000012,
       "userId": "local",
@@ -1708,7 +1744,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000d",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000e",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000013,
       "userId": "local",
@@ -1727,7 +1763,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000e",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000014,
       "userId": "local",
@@ -1746,7 +1782,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a000f",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000015,
       "userId": "local",
@@ -1764,7 +1800,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0010",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0011",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000016,
       "userId": "local",
@@ -1782,7 +1818,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0011",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0012",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000017,
       "userId": "local",
@@ -1801,7 +1837,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0012",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000018,
       "userId": "local",
@@ -1854,7 +1890,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0013",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000019,
       "userId": "local",
@@ -1877,7 +1913,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0014",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0015",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000020,
       "userId": "local",
@@ -1896,7 +1932,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0015",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000021,
       "userId": "local",
@@ -1915,7 +1951,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000022,
       "userId": "local",
@@ -1934,7 +1970,7 @@
     "contract": "RecorderEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0018",
       "explorationId": "exploration-1",
       "wallTimeMs": 1760000000023,
       "userId": "local",
@@ -2319,7 +2355,7 @@
     "contract": "BlaymEventEnvelope",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0018",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0019",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 1,
@@ -3435,7 +3471,7 @@
     "contract": "BlaymEvent",
     "value": {
       "schemaVersion": 2,
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0016",
+      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0017",
       "explorationId": "exploration-1",
       "branchId": "branch-main",
       "tick": 22,

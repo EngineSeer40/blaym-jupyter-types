@@ -83,6 +83,13 @@ class CellMovedPayload(BaseModel):
     toIndex: Annotated[StrictInt, Field(ge=0)]
 
 
+class CellOutputsClearedPayload(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    cellId: StrictStr
+
+
 class CellSourceChangedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -636,6 +643,38 @@ class RecorderEvent6(BaseModel):
             description='One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.'
         ),
     ]
+    payload: CellOutputsClearedPayload
+    schemaVersion: Literal[2]
+    type: Literal['cell_outputs_cleared']
+    userId: Annotated[StrictStr, Field(description='"local" in the first version.')]
+    wallTimeMs: Annotated[
+        StrictInt,
+        Field(
+            description='Clock time in milliseconds; a label only, never used for order.',
+            ge=0,
+        ),
+    ]
+    workspaceId: Annotated[
+        StrictStr, Field(description='"local" in the first version.')
+    ]
+
+
+class RecorderEvent7(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    authorConfidence: AuthorConfidence | None = None
+    authorHint: AuthorHint | None = None
+    editor: Editor | None = None
+    eventId: UUID
+    explorationId: Annotated[StrictStr, Field(description="The notebook's history.")]
+    links: EventLinks | None = None
+    originId: Annotated[
+        StrictStr,
+        Field(
+            description='One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.'
+        ),
+    ]
     payload: CellSourceChangedPayload
     schemaVersion: Literal[2]
     type: Literal['cell_source_changed']
@@ -652,7 +691,7 @@ class RecorderEvent6(BaseModel):
     ]
 
 
-class RecorderEvent7(BaseModel):
+class RecorderEvent8(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -684,7 +723,7 @@ class RecorderEvent7(BaseModel):
     ]
 
 
-class RecorderEvent8(BaseModel):
+class RecorderEvent9(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -716,7 +755,7 @@ class RecorderEvent8(BaseModel):
     ]
 
 
-class RecorderEvent13(BaseModel):
+class RecorderEvent14(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -748,7 +787,7 @@ class RecorderEvent13(BaseModel):
     ]
 
 
-class RecorderEvent14(BaseModel):
+class RecorderEvent15(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -780,7 +819,7 @@ class RecorderEvent14(BaseModel):
     ]
 
 
-class RecorderEvent16(BaseModel):
+class RecorderEvent17(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -812,7 +851,7 @@ class RecorderEvent16(BaseModel):
     ]
 
 
-class RecorderEvent17(BaseModel):
+class RecorderEvent18(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -844,7 +883,7 @@ class RecorderEvent17(BaseModel):
     ]
 
 
-class RecorderEvent20(BaseModel):
+class RecorderEvent21(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -876,7 +915,7 @@ class RecorderEvent20(BaseModel):
     ]
 
 
-class RecorderEvent21(BaseModel):
+class RecorderEvent22(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1353,6 +1392,48 @@ class CellMoved(BaseModel):
         ),
     ]
     type: Literal['cell_moved']
+    userId: Annotated[StrictStr, Field(description='"local" in the first version.')]
+    wallTimeMs: Annotated[
+        StrictInt,
+        Field(
+            description='Clock time in milliseconds; a label only, never used for order.',
+            ge=0,
+        ),
+    ]
+    workspaceId: Annotated[
+        StrictStr, Field(description='"local" in the first version.')
+    ]
+
+
+class CellOutputsCleared(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    authorConfidence: AuthorConfidence | None = None
+    authorHint: AuthorHint | None = None
+    branchId: Annotated[
+        StrictStr, Field(description="Made by Blaym's service, never by a browser.")
+    ]
+    editor: Editor | None = None
+    eventId: UUID
+    explorationId: Annotated[StrictStr, Field(description="The notebook's history.")]
+    links: EventLinks | None = None
+    originId: Annotated[
+        StrictStr,
+        Field(
+            description='One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.'
+        ),
+    ]
+    payload: CellOutputsClearedPayload
+    schemaVersion: Literal[2]
+    tick: Annotated[
+        StrictInt,
+        Field(
+            description='Dense running order for the whole history, from the writer.',
+            ge=1,
+        ),
+    ]
+    type: Literal['cell_outputs_cleared']
     userId: Annotated[StrictStr, Field(description='"local" in the first version.')]
     wallTimeMs: Annotated[
         StrictInt,
@@ -1962,7 +2043,7 @@ class PrepareOutputsResponse(BaseModel):
     items: list[OutputItem]
 
 
-class RecorderEvent9(BaseModel):
+class RecorderEvent10(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1994,7 +2075,7 @@ class RecorderEvent9(BaseModel):
     ]
 
 
-class RecorderEvent10(BaseModel):
+class RecorderEvent11(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2026,7 +2107,7 @@ class RecorderEvent10(BaseModel):
     ]
 
 
-class RecorderEvent12(BaseModel):
+class RecorderEvent13(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2058,7 +2139,7 @@ class RecorderEvent12(BaseModel):
     ]
 
 
-class RecorderEvent15(BaseModel):
+class RecorderEvent16(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2090,7 +2171,7 @@ class RecorderEvent15(BaseModel):
     ]
 
 
-class RecorderEvent19(BaseModel):
+class RecorderEvent20(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2122,7 +2203,7 @@ class RecorderEvent19(BaseModel):
     ]
 
 
-class RecorderEvent22(BaseModel):
+class RecorderEvent23(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2154,7 +2235,7 @@ class RecorderEvent22(BaseModel):
     ]
 
 
-class RecorderEvent23(BaseModel):
+class RecorderEvent24(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2763,7 +2844,7 @@ class RecorderEvent2(BaseModel):
     ]
 
 
-class RecorderEvent11(BaseModel):
+class RecorderEvent12(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2795,7 +2876,7 @@ class RecorderEvent11(BaseModel):
     ]
 
 
-class RecorderEvent18(BaseModel):
+class RecorderEvent19(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2852,6 +2933,7 @@ class RecorderEvent(
         | RecorderEvent21
         | RecorderEvent22
         | RecorderEvent23
+        | RecorderEvent24
     ]
 ):
     root: (
@@ -2878,6 +2960,7 @@ class RecorderEvent(
         | RecorderEvent21
         | RecorderEvent22
         | RecorderEvent23
+        | RecorderEvent24
     )
 
 
@@ -3085,6 +3168,7 @@ class BlaymEvent(
         | CellDeleted
         | CellMoved
         | CellTypeChanged
+        | CellOutputsCleared
         | CellSourceChanged
         | CellMetadataChanged
         | NotebookMetadataChanged
@@ -3111,6 +3195,7 @@ class BlaymEvent(
         | CellDeleted
         | CellMoved
         | CellTypeChanged
+        | CellOutputsCleared
         | CellSourceChanged
         | CellMetadataChanged
         | NotebookMetadataChanged

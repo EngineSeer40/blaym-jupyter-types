@@ -43,6 +43,9 @@
           "$ref": "#/definitions/CellTypeChanged"
         },
         {
+          "$ref": "#/definitions/CellOutputsCleared"
+        },
+        {
           "$ref": "#/definitions/CellSourceChanged"
         },
         {
@@ -670,6 +673,95 @@
         "cellId",
         "fromIndex",
         "toIndex"
+      ],
+      "type": "object"
+    },
+    "CellOutputsCleared": {
+      "additionalProperties": false,
+      "properties": {
+        "authorConfidence": {
+          "$ref": "#/definitions/AuthorConfidence"
+        },
+        "authorHint": {
+          "$ref": "#/definitions/AuthorHint"
+        },
+        "branchId": {
+          "description": "Made by Blaym's service, never by a browser.",
+          "type": "string"
+        },
+        "editor": {
+          "$ref": "#/definitions/Editor"
+        },
+        "eventId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "explorationId": {
+          "description": "The notebook's history.",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/definitions/EventLinks"
+        },
+        "originId": {
+          "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/CellOutputsClearedPayload"
+        },
+        "schemaVersion": {
+          "const": 2,
+          "type": "number"
+        },
+        "tick": {
+          "description": "Dense running order for the whole history, from the writer.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "type": {
+          "const": "cell_outputs_cleared",
+          "type": "string"
+        },
+        "userId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        },
+        "wallTimeMs": {
+          "description": "Clock time in milliseconds; a label only, never used for order.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceId": {
+          "description": "\"local\" in the first version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "branchId",
+        "eventId",
+        "explorationId",
+        "originId",
+        "payload",
+        "schemaVersion",
+        "tick",
+        "type",
+        "userId",
+        "wallTimeMs",
+        "workspaceId"
+      ],
+      "type": "object"
+    },
+    "CellOutputsClearedPayload": {
+      "additionalProperties": false,
+      "description": "The user cleared a cell's output in the editor (a snapshot cannot say this). The cell loses its output groups, except those of runs that are still running.",
+      "properties": {
+        "cellId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cellId"
       ],
       "type": "object"
     },
@@ -3796,6 +3888,72 @@
             },
             "type": {
               "const": "cell_type_changed",
+              "type": "string"
+            },
+            "userId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            },
+            "wallTimeMs": {
+              "description": "Clock time in milliseconds; a label only, never used for order.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "workspaceId": {
+              "description": "\"local\" in the first version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "payload",
+            "schemaVersion",
+            "eventId",
+            "explorationId",
+            "wallTimeMs",
+            "userId",
+            "workspaceId",
+            "originId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "An event as a recorder sends it: any `BlaymEvent` without `tick` and `branchId`, which Blaym's service gives (plan D14). `eventId` stays: the recorder makes it and the service uses it to drop duplicates.",
+          "properties": {
+            "authorConfidence": {
+              "$ref": "#/definitions/AuthorConfidence"
+            },
+            "authorHint": {
+              "$ref": "#/definitions/AuthorHint"
+            },
+            "editor": {
+              "$ref": "#/definitions/Editor"
+            },
+            "eventId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "explorationId": {
+              "description": "The notebook's history.",
+              "type": "string"
+            },
+            "links": {
+              "$ref": "#/definitions/EventLinks"
+            },
+            "originId": {
+              "description": "One recorder instance (for example one browser tab, one kernel listener, one chat reader). Never an editor: that is `editor`.",
+              "type": "string"
+            },
+            "payload": {
+              "$ref": "#/definitions/CellOutputsClearedPayload"
+            },
+            "schemaVersion": {
+              "const": 2,
+              "type": "number"
+            },
+            "type": {
+              "const": "cell_outputs_cleared",
               "type": "string"
             },
             "userId": {

@@ -79,6 +79,7 @@ EVENTS = {
     "cell_moved": env(
         "cell_moved", {"cellId": "cell-2", "fromIndex": 1, "toIndex": 0}, 4
     ),
+    "cell_outputs_cleared": env("cell_outputs_cleared", {"cellId": "cell-1"}, 5),
     "cell_type_changed": env(
         "cell_type_changed", {"cellId": "cell-2", "cellType": "raw"}, 5
     ),

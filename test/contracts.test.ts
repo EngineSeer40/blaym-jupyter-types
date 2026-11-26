@@ -16,6 +16,7 @@ const EVENT_TYPES = [
   "cell_deleted",
   "cell_moved",
   "cell_type_changed",
+  "cell_outputs_cleared",
   "cell_source_changed",
   "cell_metadata_changed",
   "notebook_metadata_changed",
