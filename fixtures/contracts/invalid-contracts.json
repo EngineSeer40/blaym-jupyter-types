@@ -36384,6 +36384,672 @@
     }
   },
   {
+    "name": "timeline index request: missing explorationId",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "branchId": "branch-main"
+    }
+  },
+  {
+    "name": "timeline index request: missing branchId",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "explorationId": "exploration-1"
+    }
+  },
+  {
+    "name": "timeline index request: extra key",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "extra": 1
+    }
+  },
+  {
+    "name": "timeline index response: missing apiVersion",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing ticks",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing timesMs",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing kinds",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing authors",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing confidences",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing cellIds",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing runIds",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response: missing truncated",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ]
+    }
+  },
+  {
+    "name": "timeline index response: extra key",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false,
+      "extra": 1
+    }
+  },
+  {
+    "name": "events between request: missing explorationId",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "branchId": "branch-main",
+      "fromTick": 1,
+      "toTick": 2
+    }
+  },
+  {
+    "name": "events between request: missing branchId",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "fromTick": 1,
+      "toTick": 2
+    }
+  },
+  {
+    "name": "events between request: missing fromTick",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "toTick": 2
+    }
+  },
+  {
+    "name": "events between request: missing toTick",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 1
+    }
+  },
+  {
+    "name": "events between request: extra key",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 1,
+      "toTick": 2,
+      "extra": 1
+    }
+  },
+  {
+    "name": "events between response: missing apiVersion",
+    "contract": "EventsBetweenResponse",
+    "value": {
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 1,
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 2,
+          "wallTimeMs": 1760000000002,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_inserted",
+          "payload": {
+            "cellId": "cell-2",
+            "index": 1,
+            "cellType": "markdown",
+            "code": "# Title",
+            "revision": 1,
+            "metadata": {}
+          },
+          "authorHint": "person",
+          "links": {
+            "cellId": "cell-2",
+            "cellRevision": 1
+          }
+        }
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "events between response: missing events",
+    "contract": "EventsBetweenResponse",
+    "value": {
+      "apiVersion": 1,
+      "truncated": false
+    }
+  },
+  {
+    "name": "events between response: missing truncated",
+    "contract": "EventsBetweenResponse",
+    "value": {
+      "apiVersion": 1,
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 1,
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 2,
+          "wallTimeMs": 1760000000002,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_inserted",
+          "payload": {
+            "cellId": "cell-2",
+            "index": 1,
+            "cellType": "markdown",
+            "code": "# Title",
+            "revision": 1,
+            "metadata": {}
+          },
+          "authorHint": "person",
+          "links": {
+            "cellId": "cell-2",
+            "cellRevision": 1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "events between response: extra key",
+    "contract": "EventsBetweenResponse",
+    "value": {
+      "apiVersion": 1,
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 1,
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 2,
+          "wallTimeMs": 1760000000002,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_inserted",
+          "payload": {
+            "cellId": "cell-2",
+            "index": 1,
+            "cellType": "markdown",
+            "code": "# Title",
+            "revision": 1,
+            "metadata": {}
+          },
+          "authorHint": "person",
+          "links": {
+            "cellId": "cell-2",
+            "cellRevision": 1
+          }
+        }
+      ],
+      "truncated": false,
+      "extra": 1
+    }
+  },
+  {
     "name": "search request: missing explorationId",
     "contract": "SearchRequest",
     "value": {
@@ -37235,6 +37901,81 @@
     "contract": "StoreLimits",
     "value": {
       "blobGzipLevel": "6"
+    }
+  },
+  {
+    "name": "timeline index request: limit 5001",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "limit": 5001
+    }
+  },
+  {
+    "name": "timeline index request: fromTick 0",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 0
+    }
+  },
+  {
+    "name": "timeline index response: unknown kind",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "bogus"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "events between request: maxEvents 2001",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 1,
+      "toTick": 2,
+      "maxEvents": 2001
+    }
+  },
+  {
+    "name": "events between request: toTick 0",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 1,
+      "toTick": 0
     }
   },
   {

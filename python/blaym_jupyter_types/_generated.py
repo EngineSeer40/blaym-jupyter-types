@@ -187,6 +187,24 @@ class EventLinks(BaseModel):
     runId: StrictStr | None = None
 
 
+class EventsBetweenRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    explorationId: StrictStr
+    fromTick: Annotated[StrictInt, Field(ge=1)]
+    maxEvents: Annotated[
+        StrictInt | None,
+        Field(
+            description='At most this many events; the default is 500 and the maximum 2,000.',
+            ge=1,
+            le=2000,
+        ),
+    ] = None
+    toTick: Annotated[StrictInt, Field(ge=1)]
+
+
 class EventsSinceRequest(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1193,6 +1211,48 @@ class Tick(RootModel[StrictInt]):
             description='A positive whole number: the running order of one event.', ge=1
         ),
     ]
+
+
+class TimelineIndexRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    branchId: StrictStr
+    explorationId: StrictStr
+    fromTick: Annotated[StrictInt | None, Field(ge=1)] = None
+    limit: Annotated[
+        StrictInt | None,
+        Field(
+            description='At most this many entries; the default and the maximum are 5,000.',
+            ge=1,
+            le=5000,
+        ),
+    ] = None
+    toTick: Annotated[StrictInt | None, Field(ge=1)] = None
+
+
+class TimelineKind(StrEnum):
+    edit = 'edit'
+    insert = 'insert'
+    delete = 'delete'
+    move = 'move'
+    type = 'type'
+    run_started = 'run_started'
+    run_ok = 'run_ok'
+    run_error = 'run_error'
+    run_interrupted = 'run_interrupted'
+    chart = 'chart'
+    table = 'table'
+    text_output = 'text_output'
+    chat_prompt = 'chat_prompt'
+    chat_reply = 'chat_reply'
+    kernel_start = 'kernel_start'
+    kernel_restart = 'kernel_restart'
+    outside = 'outside'
+    gap = 'gap'
+    branch_point = 'branch_point'
+    snapshot = 'snapshot'
+    other = 'other'
 
 
 class BlaymEventEnvelope(BaseModel):
@@ -2515,6 +2575,25 @@ class SearchResponse(BaseModel):
     hits: list[SearchHit]
 
 
+class TimelineIndexResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    authors: list[AuthorHint]
+    cellIds: list[StrictStr | None]
+    confidences: list[AuthorConfidence | None]
+    kinds: list[TimelineKind]
+    nextTick: Annotated[StrictInt | None, Field(ge=1)] = None
+    runIds: list[StrictStr | None]
+    ticks: list[Tick]
+    timesMs: Annotated[
+        list[StrictFloat],
+        Field(description='Clock time of each event (a label, not an order).'),
+    ]
+    truncated: StrictBool
+
+
 class CellInsertedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3216,6 +3295,16 @@ class BlaymEvent(
         | RecordingGapEnded,
         Field(description='Every event Blaym records, told apart by `type`.'),
     ]
+
+
+class EventsBetweenResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    apiVersion: ApiVersion
+    events: list[BlaymEvent]
+    nextTick: Annotated[StrictInt | None, Field(ge=1)] = None
+    truncated: StrictBool
 
 
 class EventsSinceResponse(BaseModel):

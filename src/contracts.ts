@@ -1238,6 +1238,130 @@ export interface EventsSinceResponse {
   outline: HistoryOutline;
 }
 
+/**
+ * What a timeline entry shows, one per stored event. `type` is a cell type
+ * change; `other` is everything the bar has no mark for (metadata, renames,
+ * cleared outputs).
+ */
+export type TimelineKind =
+  | 'edit'
+  | 'insert'
+  | 'delete'
+  | 'move'
+  | 'type'
+  | 'run_started'
+  | 'run_ok'
+  | 'run_error'
+  | 'run_interrupted'
+  | 'chart'
+  | 'table'
+  | 'text_output'
+  | 'chat_prompt'
+  | 'chat_reply'
+  | 'kernel_start'
+  | 'kernel_restart'
+  | 'outside'
+  | 'gap'
+  | 'branch_point'
+  | 'snapshot'
+  | 'other';
+
+/**
+ * Ask for the timeline index of a branch's line: one entry per event, in tick
+ * order, from `fromTick` to `toTick` (both inclusive; defaults: the start and
+ * the end). The answer is a `TimelineIndexResponse`.
+ * @additionalProperties false
+ */
+export interface TimelineIndexRequest {
+  explorationId: string;
+  branchId: string;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  fromTick?: number;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  toTick?: number;
+  /**
+   * At most this many entries; the default and the maximum are 5,000.
+   * @asType integer
+   * @minimum 1
+   * @maximum 5000
+   */
+  limit?: number;
+}
+
+/**
+ * The timeline index as parallel arrays (all the same length, entry i in each
+ * describes one event). `cellIds` and `runIds` are null where the event touches
+ * no cell or run; `confidences` is null where the event has none. When
+ * `truncated`, `nextTick` is the tick of the first entry left out.
+ * @additionalProperties false
+ */
+export interface TimelineIndexResponse {
+  apiVersion: ApiVersion;
+  ticks: Tick[];
+  /** Clock time of each event (a label, not an order). */
+  timesMs: number[];
+  kinds: TimelineKind[];
+  authors: AuthorHint[];
+  confidences: (AuthorConfidence | null)[];
+  cellIds: (string | null)[];
+  runIds: (string | null)[];
+  truncated: boolean;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  nextTick?: number;
+}
+
+/**
+ * Ask for the stored events on a branch's line from `fromTick` to `toTick`
+ * (both inclusive). The answer is an `EventsBetweenResponse`.
+ * @additionalProperties false
+ */
+export interface EventsBetweenRequest {
+  explorationId: string;
+  branchId: string;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  fromTick: number;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  toTick: number;
+  /**
+   * At most this many events; the default is 500 and the maximum 2,000.
+   * @asType integer
+   * @minimum 1
+   * @maximum 2000
+   */
+  maxEvents?: number;
+}
+
+/**
+ * The events between two moments, in tick order. When `truncated`, `nextTick`
+ * is the tick of the first event left out.
+ * @additionalProperties false
+ */
+export interface EventsBetweenResponse {
+  apiVersion: ApiVersion;
+  events: BlaymEvent[];
+  truncated: boolean;
+  /**
+   * @asType integer
+   * @minimum 1
+   */
+  nextTick?: number;
+}
+
 /** What kind of thing a search hit is. */
 export type SearchHitKind =
   | 'code'

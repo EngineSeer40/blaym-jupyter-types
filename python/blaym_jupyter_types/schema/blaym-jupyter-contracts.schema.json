@@ -1557,6 +1557,67 @@
       },
       "type": "object"
     },
+    "EventsBetweenRequest": {
+      "additionalProperties": false,
+      "description": "Ask for the stored events on a branch's line from `fromTick` to `toTick` (both inclusive). The answer is an `EventsBetweenResponse`.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "fromTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "maxEvents": {
+          "description": "At most this many events; the default is 500 and the maximum 2,000.",
+          "maximum": 2000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "toTick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "explorationId",
+        "branchId",
+        "fromTick",
+        "toTick"
+      ],
+      "type": "object"
+    },
+    "EventsBetweenResponse": {
+      "additionalProperties": false,
+      "description": "The events between two moments, in tick order. When `truncated`, `nextTick` is the tick of the first event left out.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/definitions/BlaymEvent"
+          },
+          "type": "array"
+        },
+        "nextTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "events",
+        "truncated"
+      ],
+      "type": "object"
+    },
     "EventsSinceRequest": {
       "additionalProperties": false,
       "description": "Ask for the events after a tick on a branch's line (what a viewer missed).",
@@ -6028,6 +6089,148 @@
       "description": "A positive whole number: the running order of one event.",
       "minimum": 1,
       "type": "integer"
+    },
+    "TimelineIndexRequest": {
+      "additionalProperties": false,
+      "description": "Ask for the timeline index of a branch's line: one entry per event, in tick order, from `fromTick` to `toTick` (both inclusive; defaults: the start and the end). The answer is a `TimelineIndexResponse`.",
+      "properties": {
+        "branchId": {
+          "type": "string"
+        },
+        "explorationId": {
+          "type": "string"
+        },
+        "fromTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "limit": {
+          "description": "At most this many entries; the default and the maximum are 5,000.",
+          "maximum": 5000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "toTick": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "explorationId",
+        "branchId"
+      ],
+      "type": "object"
+    },
+    "TimelineIndexResponse": {
+      "additionalProperties": false,
+      "description": "The timeline index as parallel arrays (all the same length, entry i in each describes one event). `cellIds` and `runIds` are null where the event touches no cell or run; `confidences` is null where the event has none. When `truncated`, `nextTick` is the tick of the first entry left out.",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/ApiVersion"
+        },
+        "authors": {
+          "items": {
+            "$ref": "#/definitions/AuthorHint"
+          },
+          "type": "array"
+        },
+        "cellIds": {
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": "array"
+        },
+        "confidences": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/AuthorConfidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "kinds": {
+          "items": {
+            "$ref": "#/definitions/TimelineKind"
+          },
+          "type": "array"
+        },
+        "nextTick": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runIds": {
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": "array"
+        },
+        "ticks": {
+          "items": {
+            "$ref": "#/definitions/Tick"
+          },
+          "type": "array"
+        },
+        "timesMs": {
+          "description": "Clock time of each event (a label, not an order).",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "ticks",
+        "timesMs",
+        "kinds",
+        "authors",
+        "confidences",
+        "cellIds",
+        "runIds",
+        "truncated"
+      ],
+      "type": "object"
+    },
+    "TimelineKind": {
+      "description": "What a timeline entry shows, one per stored event. `type` is a cell type change; `other` is everything the bar has no mark for (metadata, renames, cleared outputs).",
+      "enum": [
+        "edit",
+        "insert",
+        "delete",
+        "move",
+        "type",
+        "run_started",
+        "run_ok",
+        "run_error",
+        "run_interrupted",
+        "chart",
+        "table",
+        "text_output",
+        "chat_prompt",
+        "chat_reply",
+        "kernel_start",
+        "kernel_restart",
+        "outside",
+        "gap",
+        "branch_point",
+        "snapshot",
+        "other"
+      ],
+      "type": "string"
     }
   }
 }

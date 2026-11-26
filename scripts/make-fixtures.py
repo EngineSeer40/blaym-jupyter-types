@@ -719,6 +719,20 @@ V("put blob response truncated", "PutBlobResponse", {**PUT_BLOB, "truncated": Tr
 V("events since request", "EventsSinceRequest", SINCE_REQ)
 V("events since response", "EventsSinceResponse", SINCE_RESP)
 V("events since response with no events", "EventsSinceResponse", {**SINCE_RESP, "events": []})
+TL_REQ = {"explorationId": "exploration-1", "branchId": "branch-main"}
+TL_RESP = {"apiVersion": 1, "ticks": [1, 2], "timesMs": [1760000000001, 1760000000002], "kinds": ["snapshot", "run_ok"],
+           "authors": ["unknown", "ai"], "confidences": [None, "guess"], "cellIds": [None, "cell-1"],
+           "runIds": [None, "run-1"], "truncated": False}
+BTW_REQ = {"explorationId": "exploration-1", "branchId": "branch-main", "fromTick": 1, "toTick": 2}
+BTW_RESP = {"apiVersion": 1, "events": [EVENTS["notebook_snapshot"], EVENTS["cell_inserted"]], "truncated": False}
+V("timeline index request", "TimelineIndexRequest", TL_REQ)
+V("timeline index request with range and limit", "TimelineIndexRequest", {**TL_REQ, "fromTick": 2, "toTick": 9, "limit": 5000})
+V("timeline index response", "TimelineIndexResponse", TL_RESP)
+V("timeline index response truncated", "TimelineIndexResponse", {**TL_RESP, "truncated": True, "nextTick": 3})
+V("events between request", "EventsBetweenRequest", BTW_REQ)
+V("events between request with maxEvents", "EventsBetweenRequest", {**BTW_REQ, "maxEvents": 2000})
+V("events between response", "EventsBetweenResponse", BTW_RESP)
+V("events between response truncated", "EventsBetweenResponse", {**BTW_RESP, "truncated": True, "nextTick": 3})
 V("search request", "SearchRequest", SEARCH_REQ)
 V("search request with kinds and limit", "SearchRequest", {**SEARCH_REQ, "kinds": ["code", "chat", "output_text", "table_columns", "chart_text"], "limit": 20})
 V("search hit", "SearchHit", SEARCH_HIT)
@@ -754,6 +768,10 @@ for name, contract, base in (
     ("put blob response", "PutBlobResponse", PUT_BLOB),
     ("events since request", "EventsSinceRequest", SINCE_REQ),
     ("events since response", "EventsSinceResponse", SINCE_RESP),
+    ("timeline index request", "TimelineIndexRequest", TL_REQ),
+    ("timeline index response", "TimelineIndexResponse", TL_RESP),
+    ("events between request", "EventsBetweenRequest", BTW_REQ),
+    ("events between response", "EventsBetweenResponse", BTW_RESP),
     ("search request", "SearchRequest", SEARCH_REQ),
     ("search hit", "SearchHit", SEARCH_HIT),
     ("search response", "SearchResponse", SEARCH_RESP),
@@ -802,6 +820,11 @@ for bad_v in (-1, 1.5, "1"):
     I(f"store limits: truncatedPreviewBytes = {bad_v!r}", "StoreLimits", {"truncatedPreviewBytes": bad_v})
 for bad_v in (0, 10, 1.5, "6"):
     I(f"store limits: blobGzipLevel = {bad_v!r}", "StoreLimits", {"blobGzipLevel": bad_v})
+I("timeline index request: limit 5001", "TimelineIndexRequest", {**TL_REQ, "limit": 5001})
+I("timeline index request: fromTick 0", "TimelineIndexRequest", {**TL_REQ, "fromTick": 0})
+I("timeline index response: unknown kind", "TimelineIndexResponse", {**TL_RESP, "kinds": ["snapshot", "bogus"]})
+I("events between request: maxEvents 2001", "EventsBetweenRequest", {**BTW_REQ, "maxEvents": 2001})
+I("events between request: toTick 0", "EventsBetweenRequest", {**BTW_REQ, "toTick": 0})
 I("events since response: apiVersion 2", "EventsSinceResponse", {**SINCE_RESP, "apiVersion": 2})
 I("events since response: events carry no tick", "EventsSinceResponse", {**SINCE_RESP, "events": [_rec_ok]})
 I("events since response: outline not an outline", "EventsSinceResponse", {**SINCE_RESP, "outline": {"explorationId": "x"}})

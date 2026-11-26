@@ -3159,6 +3159,292 @@
     }
   },
   {
+    "name": "timeline index request",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main"
+    }
+  },
+  {
+    "name": "timeline index request with range and limit",
+    "contract": "TimelineIndexRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 2,
+      "toTick": 9,
+      "limit": 5000
+    }
+  },
+  {
+    "name": "timeline index response",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "timeline index response truncated",
+    "contract": "TimelineIndexResponse",
+    "value": {
+      "apiVersion": 1,
+      "ticks": [
+        1,
+        2
+      ],
+      "timesMs": [
+        1760000000001,
+        1760000000002
+      ],
+      "kinds": [
+        "snapshot",
+        "run_ok"
+      ],
+      "authors": [
+        "unknown",
+        "ai"
+      ],
+      "confidences": [
+        null,
+        "guess"
+      ],
+      "cellIds": [
+        null,
+        "cell-1"
+      ],
+      "runIds": [
+        null,
+        "run-1"
+      ],
+      "truncated": true,
+      "nextTick": 3
+    }
+  },
+  {
+    "name": "events between request",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 1,
+      "toTick": 2
+    }
+  },
+  {
+    "name": "events between request with maxEvents",
+    "contract": "EventsBetweenRequest",
+    "value": {
+      "explorationId": "exploration-1",
+      "branchId": "branch-main",
+      "fromTick": 1,
+      "toTick": 2,
+      "maxEvents": 2000
+    }
+  },
+  {
+    "name": "events between response",
+    "contract": "EventsBetweenResponse",
+    "value": {
+      "apiVersion": 1,
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 1,
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 2,
+          "wallTimeMs": 1760000000002,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_inserted",
+          "payload": {
+            "cellId": "cell-2",
+            "index": 1,
+            "cellType": "markdown",
+            "code": "# Title",
+            "revision": 1,
+            "metadata": {}
+          },
+          "authorHint": "person",
+          "links": {
+            "cellId": "cell-2",
+            "cellRevision": 1
+          }
+        }
+      ],
+      "truncated": false
+    }
+  },
+  {
+    "name": "events between response truncated",
+    "contract": "EventsBetweenResponse",
+    "value": {
+      "apiVersion": 1,
+      "events": [
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0001",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 1,
+          "wallTimeMs": 1760000000001,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "notebook_snapshot",
+          "payload": {
+            "path": "analysis.ipynb",
+            "notebookMetadata": {},
+            "kernelName": "python3",
+            "language": "python",
+            "cells": [
+              {
+                "cellId": "cell-1",
+                "cellType": "code",
+                "code": "print('hello')",
+                "revision": 2,
+                "metadata": {
+                  "tags": [
+                    "demo"
+                  ]
+                },
+                "outputs": [
+                  {
+                    "runId": "run-1",
+                    "items": [
+                      {
+                        "outputType": "stream",
+                        "mimeTypes": [
+                          "text/plain"
+                        ],
+                        "contentHash": "sha256:ab12",
+                        "preview": "hello",
+                        "truncated": false,
+                        "sizeBytes": 5,
+                        "searchText": "hello"
+                      }
+                    ]
+                  }
+                ],
+                "runCount": 1
+              }
+            ]
+          },
+          "authorHint": "blaym"
+        },
+        {
+          "schemaVersion": 2,
+          "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0002",
+          "explorationId": "exploration-1",
+          "branchId": "branch-main",
+          "tick": 2,
+          "wallTimeMs": 1760000000002,
+          "userId": "local",
+          "workspaceId": "local",
+          "originId": "origin-1",
+          "type": "cell_inserted",
+          "payload": {
+            "cellId": "cell-2",
+            "index": 1,
+            "cellType": "markdown",
+            "code": "# Title",
+            "revision": 1,
+            "metadata": {}
+          },
+          "authorHint": "person",
+          "links": {
+            "cellId": "cell-2",
+            "cellRevision": 1
+          }
+        }
+      ],
+      "truncated": true,
+      "nextTick": 3
+    }
+  },
+  {
     "name": "search request",
     "contract": "SearchRequest",
     "value": {
