@@ -3774,16 +3774,6 @@
     }
   },
   {
-    "name": "ingest refusal reason: run_in_progress",
-    "contract": "IngestOutcome",
-    "value": {
-      "status": "refused",
-      "eventId": "3f2b8c1e-5a7d-4e19-9c3b-1d2e4f6a0003",
-      "reason": "run_in_progress",
-      "detail": "Another editor is recording this notebook."
-    }
-  },
-  {
     "name": "run output group: snapshot runId",
     "contract": "RunOutputs",
     "value": {

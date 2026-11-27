@@ -906,7 +906,6 @@ NB_STATUS = {"apiVersion": 1, "notebookId": "nb-1", "explorationId": "nb-1", "re
              "needsRegister": False, "needsResync": False, "runsOpen": 0, "openGaps": [], "cellRevisions": {"cell-1": 3}, "notices": []}
 
 V("gap reason: switched_off", "BlaymEvent", {**EVENTS["recording_gap_started"], "payload": {**EVENTS["recording_gap_started"]["payload"], "reason": "switched_off"}})
-V("ingest refusal reason: run_in_progress", "IngestOutcome", {**REFUSED, "reason": "run_in_progress"})
 I("gap reason: unknown value", "BlaymEvent", {**EVENTS["recording_gap_started"], "payload": {**EVENTS["recording_gap_started"]["payload"], "reason": "switched-off"}})
 I("ingest refusal reason: unknown value", "IngestOutcome", {**REFUSED, "reason": "run_in_flight"})
 I("run output group: snapshot runId must be a string", "RunOutputs", {"runId": 5, "items": []})

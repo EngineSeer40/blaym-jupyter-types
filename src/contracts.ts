@@ -1030,10 +1030,7 @@ export interface HistoryAdvanced {
 /** The version of the service API itself (separate from `schemaVersion`). */
 export type ApiVersion = 1;
 
-/**
- * Why the service refused one event. `run_in_progress`: a snapshot (not the
- * first) or an outside change arrived while a run on the branch is running.
- */
+/** Why the service refused one event. */
 export type IngestRefusalReason =
   | 'unauthorized'
   | 'unsupported_schema_version'
@@ -1042,8 +1039,7 @@ export type IngestRefusalReason =
   | 'invalid_event'
   | 'conflict'
   | 'missing_blob'
-  | 'bad_first_event'
-  | 'run_in_progress';
+  | 'bad_first_event';
 
 /**
  * Events from a recorder. They go to the active branch unless

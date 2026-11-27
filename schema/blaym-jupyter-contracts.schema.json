@@ -1851,7 +1851,7 @@
       ]
     },
     "IngestRefusalReason": {
-      "description": "Why the service refused one event. `run_in_progress`: a snapshot (not the first) or an outside change arrived while a run on the branch is running.",
+      "description": "Why the service refused one event.",
       "enum": [
         "unauthorized",
         "unsupported_schema_version",
@@ -1860,8 +1860,7 @@
         "invalid_event",
         "conflict",
         "missing_blob",
-        "bad_first_event",
-        "run_in_progress"
+        "bad_first_event"
       ],
       "type": "string"
     },

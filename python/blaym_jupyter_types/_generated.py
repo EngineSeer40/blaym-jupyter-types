@@ -278,7 +278,6 @@ class IngestRefusalReason(StrEnum):
     conflict = 'conflict'
     missing_blob = 'missing_blob'
     bad_first_event = 'bad_first_event'
-    run_in_progress = 'run_in_progress'
 
 
 class InvalidEventReason(StrEnum):
