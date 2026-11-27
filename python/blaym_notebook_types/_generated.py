@@ -1,5 +1,5 @@
 # GENERATED FILE - DO NOT EDIT.
-# Source schema: schema/blaym-jupyter-contracts.schema.json (blaym-jupyter-types).
+# Source schema: schema/blaym-jupyter-contracts.schema.json (blaym-notebook-types).
 # Regenerate with: npm run python:generate
 
 from __future__ import annotations

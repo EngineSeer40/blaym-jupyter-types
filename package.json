@@ -1,5 +1,5 @@
 {
-  "name": "blaym-jupyter-types",
+  "name": "blaym-notebook-types",
   "version": "0.1.0",
   "description": "Shared Blaym Jupyter contracts and protocol types",
   "main": "dist/index.js",
@@ -12,8 +12,8 @@
     "build": "tsc && npm run schema && npm run python:generate",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "schema": "ts-json-schema-generator --path src/contracts.ts --type '*' --tsconfig tsconfig.json -o schema/blaym-jupyter-contracts.schema.json && mkdir -p python/blaym_jupyter_types/schema && cp schema/blaym-jupyter-contracts.schema.json python/blaym_jupyter_types/schema/blaym-jupyter-contracts.schema.json",
-    "schema:check": "tmp=$(mktemp) && ts-json-schema-generator --path src/contracts.ts --type '*' --tsconfig tsconfig.json -o \"$tmp\" && diff -u schema/blaym-jupyter-contracts.schema.json \"$tmp\" && diff -u python/blaym_jupyter_types/schema/blaym-jupyter-contracts.schema.json \"$tmp\"; rc=$?; rm -f \"$tmp\"; exit $rc",
+    "schema": "ts-json-schema-generator --path src/contracts.ts --type '*' --tsconfig tsconfig.json -o schema/blaym-jupyter-contracts.schema.json && mkdir -p python/blaym_notebook_types/schema && cp schema/blaym-jupyter-contracts.schema.json python/blaym_notebook_types/schema/blaym-jupyter-contracts.schema.json",
+    "schema:check": "tmp=$(mktemp) && ts-json-schema-generator --path src/contracts.ts --type '*' --tsconfig tsconfig.json -o \"$tmp\" && diff -u schema/blaym-jupyter-contracts.schema.json \"$tmp\" && diff -u python/blaym_notebook_types/schema/blaym-jupyter-contracts.schema.json \"$tmp\"; rc=$?; rm -f \"$tmp\"; exit $rc",
     "test": "jest",
     "python:generate": "scripts/generate-python.sh",
     "python:check": "scripts/check-python.sh",

@@ -3,7 +3,7 @@
 # Generates the pydantic models from schema/blaym-jupyter-contracts.schema.json.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-OUT="${1:-python/blaym_jupyter_types/_generated.py}"
+OUT="${1:-python/blaym_notebook_types/_generated.py}"
 .venv/bin/datamodel-codegen \
   --input schema/blaym-jupyter-contracts.schema.json \
   --input-file-type jsonschema \
@@ -17,6 +17,6 @@ OUT="${1:-python/blaym_jupyter_types/_generated.py}"
   --disable-timestamp \
   --formatters black isort \
   --custom-file-header "# GENERATED FILE - DO NOT EDIT.
-# Source schema: schema/blaym-jupyter-contracts.schema.json (blaym-jupyter-types).
+# Source schema: schema/blaym-jupyter-contracts.schema.json (blaym-notebook-types).
 # Regenerate with: npm run python:generate" \
   --output "$OUT"
