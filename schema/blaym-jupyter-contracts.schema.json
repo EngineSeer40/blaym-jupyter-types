@@ -765,6 +765,11 @@
       ],
       "type": "object"
     },
+    "CellPosition": {
+      "description": "A position in, or a count of, a notebook's cells: a whole number from 0.",
+      "minimum": 0,
+      "type": "integer"
+    },
     "CellSourceChanged": {
       "additionalProperties": false,
       "properties": {
@@ -6193,7 +6198,7 @@
     },
     "TimelineIndexResponse": {
       "additionalProperties": false,
-      "description": "The timeline index as parallel arrays (all the same length, entry i in each describes one event). `cellIds` and `runIds` are null where the event touches no cell or run; `confidences` is null where the event has none. When `truncated`, `nextTick` is the tick of the first entry left out.",
+      "description": "The timeline index as parallel arrays (all the same length, entry i in each describes one event). `cellIds` and `runIds` are null where the event touches no cell or run; `confidences` is null where the event has none. When `truncated`, `nextTick` is the tick of the first entry left out. `cellIndexes` and `cellCounts` are optional (older answers lack them).",
       "properties": {
         "apiVersion": {
           "$ref": "#/definitions/ApiVersion"
@@ -6204,11 +6209,32 @@
           },
           "type": "array"
         },
+        "cellCounts": {
+          "description": "How many cells the notebook had at each entry (after the change).",
+          "items": {
+            "$ref": "#/definitions/CellPosition"
+          },
+          "type": "array"
+        },
         "cellIds": {
           "items": {
             "type": [
               "string",
               "null"
+            ]
+          },
+          "type": "array"
+        },
+        "cellIndexes": {
+          "description": "Where each entry's cell sits in the notebook's cell order (counting from 0): after the change for inserts, edits, moves and type changes, before it for deletes. Null where the entry has no cell.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/CellPosition"
+              },
+              {
+                "type": "null"
+              }
             ]
           },
           "type": "array"

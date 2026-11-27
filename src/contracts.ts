@@ -1303,10 +1303,18 @@ export interface TimelineIndexRequest {
 }
 
 /**
+ * A position in, or a count of, a notebook's cells: a whole number from 0.
+ * @asType integer
+ * @minimum 0
+ */
+export type CellPosition = number;
+
+/**
  * The timeline index as parallel arrays (all the same length, entry i in each
  * describes one event). `cellIds` and `runIds` are null where the event touches
  * no cell or run; `confidences` is null where the event has none. When
  * `truncated`, `nextTick` is the tick of the first entry left out.
+ * `cellIndexes` and `cellCounts` are optional (older answers lack them).
  * @additionalProperties false
  */
 export interface TimelineIndexResponse {
@@ -1319,6 +1327,14 @@ export interface TimelineIndexResponse {
   confidences: (AuthorConfidence | null)[];
   cellIds: (string | null)[];
   runIds: (string | null)[];
+  /**
+   * Where each entry's cell sits in the notebook's cell order (counting from 0):
+   * after the change for inserts, edits, moves and type changes, before it for
+   * deletes. Null where the entry has no cell.
+   */
+  cellIndexes?: (CellPosition | null)[];
+  /** How many cells the notebook had at each entry (after the change). */
+  cellCounts?: CellPosition[];
   truncated: boolean;
   /**
    * @asType integer

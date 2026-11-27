@@ -90,6 +90,16 @@ class CellOutputsClearedPayload(BaseModel):
     cellId: StrictStr
 
 
+class CellPosition(RootModel[StrictInt]):
+    root: Annotated[
+        StrictInt,
+        Field(
+            description="A position in, or a count of, a notebook's cells: a whole number from 0.",
+            ge=0,
+        ),
+    ]
+
+
 class CellSourceChangedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2624,7 +2634,19 @@ class TimelineIndexResponse(BaseModel):
     )
     apiVersion: ApiVersion
     authors: list[AuthorHint]
+    cellCounts: Annotated[
+        list[CellPosition] | None,
+        Field(
+            description='How many cells the notebook had at each entry (after the change).'
+        ),
+    ] = None
     cellIds: list[StrictStr | None]
+    cellIndexes: Annotated[
+        list[CellPosition | None] | None,
+        Field(
+            description="Where each entry's cell sits in the notebook's cell order (counting from 0): after the change for inserts, edits, moves and type changes, before it for deletes. Null where the entry has no cell."
+        ),
+    ] = None
     confidences: list[AuthorConfidence | None]
     kinds: list[TimelineKind]
     nextTick: Annotated[StrictInt | None, Field(ge=1)] = None

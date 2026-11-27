@@ -30,6 +30,9 @@ it("accepts every valid fixture", () => {
     const result = validateContract(c.contract, c.value);
     expect([c.name, result.ok ? [] : result.errors]).toEqual([c.name, []]);
   }
+  const old = { apiVersion: 1, ticks: [], timesMs: [], kinds: [], authors: [], confidences: [], cellIds: [], runIds: [], truncated: false };
+  expect(validateContract("TimelineIndexResponse", old).ok).toBe(true);
+  expect(validateContract("TimelineIndexResponse", { ...old, cellIndexes: [], cellCounts: [] }).ok).toBe(true);
 });
 
 it("rejects every invalid fixture", () => {
