@@ -396,12 +396,39 @@ class NotebookRegistration(BaseModel):
     ] = None
 
 
+class NotebookRenameRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    instanceId: Annotated[
+        StrictStr, Field(description='The recorder instance that saw the rename.')
+    ]
+    newPath: StrictStr
+    notebookId: StrictStr
+    oldPath: StrictStr
+
+
 class NotebookRenamedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     newPath: StrictStr
     oldPath: StrictStr
+
+
+class Phase(StrEnum):
+    started = 'started'
+    finished = 'finished'
+
+
+class NotebookSaveNotice(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    instanceId: StrictStr
+    notebookId: StrictStr
+    path: StrictStr
+    phase: Phase
 
 
 class NotebookStatusReason(StrEnum):
@@ -1040,6 +1067,11 @@ class RunFinishedPayload(BaseModel):
     status: RunFinishStatus
 
 
+class CodeLink(StrEnum):
+    exact = 'exact'
+    by_time = 'by_time'
+
+
 class RunStartedPayload(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1051,6 +1083,12 @@ class RunStartedPayload(BaseModel):
             description='The revision of the code that was sent to the kernel.', ge=1
         ),
     ]
+    codeLink: Annotated[
+        CodeLink | None,
+        Field(
+            description="How the run was linked to its code: `exact` when the code sent to the kernel was matched, `by_time` when the editor's code at the moment the run started was taken. Absent means `exact`."
+        ),
+    ] = None
     runCount: Annotated[StrictInt, Field(ge=1)]
     runId: StrictStr
 
@@ -2541,6 +2579,12 @@ class RunState(BaseModel):
             ge=1,
         ),
     ]
+    codeLink: Annotated[
+        CodeLink | None,
+        Field(
+            description="How the run was linked to its code: `exact` when the code sent to the kernel was matched, `by_time` when the editor's code at the moment the run started was taken. Absent means `exact`."
+        ),
+    ] = None
     endedTick: Annotated[
         StrictInt | None,
         Field(

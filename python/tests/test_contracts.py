@@ -66,3 +66,11 @@ def test_recorder_event_with_a_tick_is_refused():
     for value in RECORDER:
         with pytest.raises(ValidationError):
             types.RecorderEvent.model_validate({**value, "tick": 7})
+
+
+def test_run_started_codelink_is_optional_and_restricted():
+    run = {"runId": "r1", "cellId": "c1", "cellRevision": 1, "runCount": 1}
+    assert types.RunStartedPayload.model_validate(run).codeLink is None
+    assert types.RunStartedPayload.model_validate({**run, "codeLink": "by_time"}).codeLink == "by_time"
+    with pytest.raises(ValidationError):
+        types.RunStartedPayload.model_validate({**run, "codeLink": "guess"})

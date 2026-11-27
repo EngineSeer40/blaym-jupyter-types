@@ -2534,6 +2534,32 @@
       ],
       "type": "object"
     },
+    "NotebookRenameRequest": {
+      "additionalProperties": false,
+      "description": "A notebook file was renamed or moved in the editor.",
+      "properties": {
+        "instanceId": {
+          "description": "The recorder instance that saw the rename.",
+          "type": "string"
+        },
+        "newPath": {
+          "type": "string"
+        },
+        "notebookId": {
+          "type": "string"
+        },
+        "oldPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "notebookId",
+        "instanceId",
+        "oldPath",
+        "newPath"
+      ],
+      "type": "object"
+    },
     "NotebookRenamed": {
       "additionalProperties": false,
       "properties": {
@@ -2623,6 +2649,35 @@
       "required": [
         "oldPath",
         "newPath"
+      ],
+      "type": "object"
+    },
+    "NotebookSaveNotice": {
+      "additionalProperties": false,
+      "description": "The editor is about to save, or has saved, the notebook file, so the watcher can tell its own saves from outside writes.",
+      "properties": {
+        "instanceId": {
+          "type": "string"
+        },
+        "notebookId": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "phase": {
+          "enum": [
+            "started",
+            "finished"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "notebookId",
+        "instanceId",
+        "path",
+        "phase"
       ],
       "type": "object"
     },
@@ -5742,6 +5797,14 @@
           "minimum": 1,
           "type": "integer"
         },
+        "codeLink": {
+          "description": "How the run was linked to its code: `exact` when the code sent to the kernel was matched, `by_time` when the editor's code at the moment the run started was taken. Absent means `exact`.",
+          "enum": [
+            "exact",
+            "by_time"
+          ],
+          "type": "string"
+        },
         "runCount": {
           "minimum": 1,
           "type": "integer"
@@ -5768,6 +5831,14 @@
           "description": "The revision that was sent, even if the cell was edited during the run.",
           "minimum": 1,
           "type": "integer"
+        },
+        "codeLink": {
+          "description": "How the run was linked to its code: `exact` when the code sent to the kernel was matched, `by_time` when the editor's code at the moment the run started was taken. Absent means `exact`.",
+          "enum": [
+            "exact",
+            "by_time"
+          ],
+          "type": "string"
         },
         "endedTick": {
           "description": "Tick of the finish, or of the restart that left it unfinished.",

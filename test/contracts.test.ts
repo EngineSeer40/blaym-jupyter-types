@@ -72,3 +72,10 @@ it("rejects duplicate ownTicks (TypeScript schema check only)", () => {
   bad.branches[0].ownTicks = [1, 2, 2];
   expect(validateContract("HistoryOutline", bad).ok).toBe(false);
 });
+
+it("accepts a run_started with or without codeLink and refuses an unknown one", () => {
+  const run = { runId: "r1", cellId: "c1", cellRevision: 1, runCount: 1 };
+  expect(validateContract("RunStartedPayload", run).ok).toBe(true);
+  expect(validateContract("RunStartedPayload", { ...run, codeLink: "by_time" }).ok).toBe(true);
+  expect(validateContract("RunStartedPayload", { ...run, codeLink: "guess" }).ok).toBe(false);
+});

@@ -311,6 +311,12 @@ export interface RunStartedPayload {
    * @minimum 1
    */
   runCount: number;
+  /**
+   * How the run was linked to its code: `exact` when the code sent to the kernel
+   * was matched, `by_time` when the editor's code at the moment the run started
+   * was taken. Absent means `exact`.
+   */
+  codeLink?: 'exact' | 'by_time';
 }
 
 /** @additionalProperties false */
@@ -690,6 +696,12 @@ export interface RunState {
    * @minimum 1
    */
   runCount: number;
+  /**
+   * How the run was linked to its code: `exact` when the code sent to the kernel
+   * was matched, `by_time` when the editor's code at the moment the run started
+   * was taken. Absent means `exact`.
+   */
+  codeLink?: 'exact' | 'by_time';
   status: RunStatus;
   /**
    * @asType integer
@@ -1603,6 +1615,30 @@ export interface NotebookRegistration {
   collaboration?: boolean;
   /** Ask to become the active recorder even if another instance holds it. */
   takeover?: boolean;
+}
+
+/**
+ * A notebook file was renamed or moved in the editor.
+ * @additionalProperties false
+ */
+export interface NotebookRenameRequest {
+  notebookId: string;
+  /** The recorder instance that saw the rename. */
+  instanceId: string;
+  oldPath: string;
+  newPath: string;
+}
+
+/**
+ * The editor is about to save, or has saved, the notebook file, so the watcher
+ * can tell its own saves from outside writes.
+ * @additionalProperties false
+ */
+export interface NotebookSaveNotice {
+  notebookId: string;
+  instanceId: string;
+  path: string;
+  phase: 'started' | 'finished';
 }
 
 /** Why an instance is not the active recorder. */
