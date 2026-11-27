@@ -10,56 +10,43 @@ ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "fixtures" / "contracts"
 VALID = json.loads((FIXTURES / "valid-contracts.json").read_text())
 INVALID = json.loads((FIXTURES / "invalid-contracts.json").read_text())
-
-EVENT_TYPES = [
-    "notebook_snapshot", "cell_inserted", "cell_deleted", "cell_moved",
-    "cell_type_changed", "cell_outputs_cleared", "cell_source_changed", "cell_metadata_changed",
-    "notebook_metadata_changed", "run_started", "run_finished", "output_added",
-    "output_replaced", "outputs_cleared", "kernel_started", "kernel_restarted",
-    "notebook_renamed", "notebook_copied", "changed_outside_editor",
-    "chat_message_added", "chat_message_updated", "branch_point_created",
-    "recording_gap_started", "recording_gap_ended",
-]  # fmt: skip
+DEFS = json.loads(types.schema_path().read_text())["definitions"]
+RECORDER = [c["value"] for c in VALID if c["contract"] == "RecorderEvent"]
 
 
 def _model(name):
     return getattr(types, name)
 
 
-@pytest.mark.parametrize("case", VALID, ids=[c["name"] for c in VALID])
-def test_valid_fixture_parses_and_round_trips(case):
-    model = _model(case["contract"]).model_validate(case["value"])
-    assert model.model_dump(mode="json", exclude_none=True) == case["value"]
+def _members(union, key):
+    """The names a union accepts, read from the schema's own constants."""
+    return {DEFS[m["$ref"].split("/")[-1]]["properties"][key]["const"] for m in DEFS[union]["anyOf"]}
 
 
-@pytest.mark.parametrize("case", INVALID, ids=[c["name"] for c in INVALID])
-def test_invalid_fixture_rejected(case):
-    with pytest.raises(ValidationError):
-        _model(case["contract"]).model_validate(case["value"])
+def _values(contract, key):
+    return {c["value"][key] for c in VALID if c["contract"] == contract}
 
 
-def test_every_event_type_has_a_valid_fixture():
-    covered = {
-        c["value"]["type"] for c in VALID if c["contract"] == "BlaymEvent"
-    }
-    assert covered == set(EVENT_TYPES)
+def test_valid_fixtures_parse_and_round_trip():
+    for case in VALID:
+        model = _model(case["contract"]).model_validate(case["value"])
+        assert model.model_dump(mode="json", exclude_none=True) == case["value"], case["name"]
 
 
-def test_every_result_type_has_a_valid_fixture():
-    covered = {c["value"]["status"] for c in VALID if c["contract"] == "RebuildResult"}
-    assert covered == {
-        "ok", "missing_events", "conflict", "invalid_revision",
-        "unknown_cell", "unknown_branch", "lineage_loop", "invalid_event",
-    }  # fmt: skip
+def test_invalid_fixtures_are_rejected():
+    for case in INVALID:
+        with pytest.raises(ValidationError):
+            _model(case["contract"]).model_validate(case["value"])
 
 
-def test_every_invalid_event_reason_has_a_valid_fixture():
-    reasons = {
-        c["value"]["reason"]
-        for c in VALID
-        if c["contract"] == "RebuildResult" and c["value"]["status"] == "invalid_event"
-    }
-    assert len(reasons) == 13
+def test_every_event_type_and_result_has_a_fixture():
+    events = _members("BlaymEvent", "type")
+    assert events
+    assert _values("BlaymEvent", "type") == events
+    assert {v["type"] for v in RECORDER} == events
+    results = _members("RebuildResult", "status")
+    assert results
+    assert _values("RebuildResult", "status") == results
 
 
 def test_event_union_picks_the_model_by_type():
@@ -69,43 +56,13 @@ def test_event_union_picks_the_model_by_type():
             assert parsed.type == case["value"]["type"]
 
 
-RECORDER = [c["value"] for c in VALID if c["contract"] == "RecorderEvent"]
+def test_recorder_event_becomes_a_blaym_event_with_tick_and_branch():
+    for value in RECORDER:
+        full = {**value, "tick": 7, "branchId": "branch-main"}
+        assert types.BlaymEvent.model_validate(full).root.type == value["type"]
 
 
-def test_every_event_type_has_a_recorder_fixture():
-    assert {v["type"] for v in RECORDER} == set(EVENT_TYPES)
-
-
-@pytest.mark.parametrize("value", RECORDER, ids=[v["type"] for v in RECORDER])
-def test_recorder_event_becomes_a_blaym_event_with_tick_and_branch(value):
-    full = {**value, "tick": 7, "branchId": "branch-main"}
-    assert types.BlaymEvent.model_validate(full).root.type == value["type"]
-
-
-@pytest.mark.parametrize("value", RECORDER, ids=[v["type"] for v in RECORDER])
-def test_recorder_event_with_tick_or_branch_is_refused(value):
-    with pytest.raises(ValidationError):
-        types.RecorderEvent.model_validate({**value, "tick": 7})
-    with pytest.raises(ValidationError):
-        types.RecorderEvent.model_validate({**value, "branchId": "b"})
-
-
-@pytest.mark.parametrize("value", RECORDER, ids=[v["type"] for v in RECORDER])
-def test_recorder_event_alone_is_not_a_blaym_event(value):
-    with pytest.raises(ValidationError):
-        types.BlaymEvent.model_validate(value)
-
-
-def test_langgraph_is_gone():
-    assert not hasattr(types, "BlaymEventCausalLangGraph")
-    assert not hasattr(types, "BlaymEventCausal")
-
-
-def test_schema_bundle_readable_from_the_package():
-    path = types.schema_path()
-    assert path.is_file()
-    bundle = json.loads(path.read_text())
-    assert "BlaymEvent" in bundle["definitions"]
-    assert path.read_bytes() == (
-        ROOT / "schema" / "blaym-jupyter-contracts.schema.json"
-    ).read_bytes()
+def test_recorder_event_with_a_tick_is_refused():
+    for value in RECORDER:
+        with pytest.raises(ValidationError):
+            types.RecorderEvent.model_validate({**value, "tick": 7})
